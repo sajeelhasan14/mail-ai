@@ -7,7 +7,7 @@ import { run } from "@openai/agents";
 import { WriterAgent } from "./agents/writer";
 import { reviewerAgent } from "./agents/reviewer";
 
-const MAX_REWRITES = 2;
+const MAX_REWRITES = 1;
 
 export async function generateEmail(description: string) {
   let draft = (await run(WriterAgent, description)).finalOutput;

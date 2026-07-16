@@ -1,6 +1,5 @@
 import { generateEmail } from "@/lib/ai/orchestrator";
 
-
 export async function POST(request: Request) {
   const { description } = await request.json();
   if (!description) {
@@ -10,5 +9,6 @@ export async function POST(request: Request) {
     );
   }
   const email = await generateEmail(description);
-  return Response.json(email);
+  console.log(email);
+  return Response.json({ email });
 }
