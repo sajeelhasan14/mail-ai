@@ -6,7 +6,7 @@ import EmailPreview from "./EmailPreview";
 type Email = { subject: string; body: string };
 
 export default function EmailComposer() {
-  const [description, setDescription] = useState("");
+  const [input, setInput] = useState("");
   const [email, setEmail] = useState<Email | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -14,12 +14,15 @@ export default function EmailComposer() {
     setLoading(true);
     setEmail(null);
     try {
-      const res = await fetch("/api/generate", {
+      const isFirst = !email;
+      const endpoint = isFirst ? "/api/generate" : "/api/revise";
+      const body = isFirst ? { input } : { email, feedback: input };
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ description }),
+        body: JSON.stringify(body),
       });
-      if (!res.ok) throw new Error("Request failed: " + res.status);
+      // if (!res.ok) throw new Error("Request failed: " + res.status);
       const data = await res.json();
       setEmail(data.email);
     } catch (err) {
@@ -35,10 +38,11 @@ export default function EmailComposer() {
   return (
     <div>
       <EmailForm
-        value={description}
-        onChange={setDescription}
+        value={input}
+        onChange={setInput}
         onSubmit={handleGenerate}
         loading={loading}
+        
       />
       {email && <EmailPreview email={email} />}
     </div>

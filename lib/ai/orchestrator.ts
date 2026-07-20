@@ -31,4 +31,17 @@ export async function generateEmail(description: string) {
   return draft;
 }
 
+type Email = { subject: string; body: string };
 
+export async function reviseEmail(currentEmail: Email, feedback: string) {
+  const revised = (
+    await run(
+      WriterAgent,
+      `Here is the current email:${JSON.stringify(currentEmail)}
+    Rewrite it based on the instruction from the user: ${feedback}
+    Return the full updated email.
+    `,
+    )
+  ).finalOutput;
+  return revised;
+}
