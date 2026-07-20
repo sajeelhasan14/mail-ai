@@ -42,7 +42,12 @@ export default function EmailComposer() {
         onChange={setInput}
         onSubmit={handleGenerate}
         loading={loading}
-        
+        placeholder={
+          email
+            ? "How should I change it? e.g. make it shorter and more formal"
+            : "Describe the email you want…"
+        }
+        submitlabel={email ? "Revise" : "Generate Email"}
       />
       {email && <EmailPreview email={email} />}
     </div>
