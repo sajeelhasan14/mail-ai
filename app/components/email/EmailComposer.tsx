@@ -62,6 +62,13 @@ export default function EmailComposer() {
     }
   }
 
+  function handleNewEmail() {
+    setInput("");
+    setEmail(null);
+    setTo("");
+    setSent(false);
+  }
+
   return (
     <div>
       <EmailForm
@@ -84,6 +91,9 @@ export default function EmailComposer() {
 
           <button onClick={handleSend} disabled={sending || !to}>
             {sending ? "Sending…" : "Approve & Send"}
+          </button>
+          <button onClick={handleNewEmail} disabled={loading || sending}>
+            New Email
           </button>
 
           {sent && <p>✅ Email sent to {to}</p>}

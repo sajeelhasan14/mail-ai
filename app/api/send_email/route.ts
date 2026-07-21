@@ -9,6 +9,6 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
-  const messageId = await sendEmail(to, body, subject);
+  const messageId = await sendEmail(to, subject, body);
   return Response.json({ ok: true, messageId });
 }
