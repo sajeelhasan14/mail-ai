@@ -4,7 +4,7 @@ import EmailForm from "./EmailForm";
 import EmailPreview from "./EmailPreview";
 import RecipientForm from "./RecipientForm";
 
-type Email = { subject: string; body: string };
+type Email = { subject: string; body: string,tone:string };
 
 export default function EmailComposer() {
   const [to, setTo] = useState("");
@@ -50,7 +50,12 @@ export default function EmailComposer() {
       const res = await fetch("/api/send_email", {
         method: "POST",
         headers: { "Content-type": "application/json" },
-        body: JSON.stringify({ to, subject: email.subject, body: email.body }),
+        body: JSON.stringify({
+          to,
+          subject: email.subject,
+          body: email.body,
+          tone: email.tone,
+        }),
       });
       if (!res.ok) throw new Error("Send failed: " + res.status);
       setSent(true);
