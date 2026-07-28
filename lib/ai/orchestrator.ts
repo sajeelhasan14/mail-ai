@@ -9,13 +9,19 @@ import { reviewerAgent } from "./agents/reviewer";
 
 const MAX_REWRITES = 1;
 
-export async function generateEmail(description: string) {
-  let draft = (await run(WriterAgent, description)).finalOutput;
+export async function generateEmail(
+  description: string,
+  userId: string,
+  recipientEmail: string,
+) {
+  const input = `Recipient: ${recipientEmail}\n\nTask: ${description}`;
+  let draft = (await run(WriterAgent, input, { context: { userId } }))
+    .finalOutput;
   for (let i = 0; i < MAX_REWRITES; i++) {
     const review = (
       await run(
         reviewerAgent,
-        `Request: ${description}\nDraft: ${JSON.stringify(draft)}`,
+        `Request: ${input}\nDraft: ${JSON.stringify(draft)}`,
       )
     ).finalOutput;
 
@@ -24,7 +30,8 @@ export async function generateEmail(description: string) {
     draft = (
       await run(
         WriterAgent,
-        `${description}\nPrevious: ${JSON.stringify(draft)}\nFix: ${review.feedback}`,
+        `${input}\nPrevious: ${JSON.stringify(draft)}\nFix: ${review.feedback}`,
+        { context: userId },
       )
     ).finalOutput;
   }

@@ -27,4 +27,4 @@ setTracingDisabled(true);
  * Note: the Writer agent uses tools + structured output together, which older
  * Gemini 2.x models can't do at once. Use a newer model if tool calls misbehave.
  */
-export const MODEL = "gemini-2.5-flash";
+export const MODEL = "gemini-3.5-flash";

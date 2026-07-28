@@ -4,7 +4,7 @@ import EmailForm from "./EmailForm";
 import EmailPreview from "./EmailPreview";
 import RecipientForm from "./RecipientForm";
 
-type Email = { subject: string; body: string,tone:string };
+type Email = { subject: string; body: string; tone: string };
 
 export default function EmailComposer() {
   const [to, setTo] = useState("");
@@ -21,7 +21,7 @@ export default function EmailComposer() {
     try {
       const isFirst = !email;
       const endpoint = isFirst ? "/api/generate" : "/api/revise";
-      const body = isFirst ? { input } : { email, feedback: input };
+      const body = isFirst ? { input, to } : { email, feedback: input };
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -76,6 +76,7 @@ export default function EmailComposer() {
 
   return (
     <div>
+      <RecipientForm value={to} onChange={setTo} />
       <EmailForm
         value={input}
         onChange={setInput}
@@ -92,7 +93,6 @@ export default function EmailComposer() {
       {email && (
         <>
           <EmailPreview email={email} />
-          <RecipientForm value={to} onChange={setTo} />
 
           <button onClick={handleSend} disabled={sending || !to}>
             {sending ? "Sending…" : "Approve & Send"}
