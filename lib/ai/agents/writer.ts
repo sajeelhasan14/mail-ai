@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { MODEL } from "../setup";
 import { lookupRecipientContext } from "../tools/lookupRecipientContext";
+import { searchPreviousThreads } from "../tools/searchPreviousThreads";
 
 export const emailSchema = z.object({
   subject: z.string().describe("The subject line of the email"),
@@ -25,7 +26,7 @@ Before writing, call the lookup_recipient_context tool with the recipient's emai
 - If there is history (known: true), match the tone you usually use with them.
 - If there is no history (known: false), just write normally.`,
   model: MODEL,
-  tools: [lookupRecipientContext],
+  tools: [lookupRecipientContext,searchPreviousThreads],
   outputType: emailSchema,
   
 });

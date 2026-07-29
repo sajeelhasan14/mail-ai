@@ -15,8 +15,9 @@ export async function generateEmail(
   recipientEmail: string,
 ) {
   const input = `Recipient: ${recipientEmail}\n\nTask: ${description}`;
-  let draft = (await run(WriterAgent, input, { context: { userId } }))
-    .finalOutput;
+  let draft = (
+    await run(WriterAgent, input, { context: { userId, recipientEmail } })
+  ).finalOutput;
   for (let i = 0; i < MAX_REWRITES; i++) {
     const review = (
       await run(

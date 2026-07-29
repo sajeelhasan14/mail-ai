@@ -1,3 +1,4 @@
+import { embed } from "@/lib/ai/embed";
 import { pool } from "@/lib/database/db";
 import { sendEmail } from "@/lib/mailer/mailer";
 import { createClient } from "@/lib/supabase/server";
@@ -9,10 +10,8 @@ export async function POST(request: Request) {
     data: { user },
     error,
   } = await supabase.auth.getUser();
-  
 
   if (error || !user) {
-   
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
   const userId = user.id;
@@ -25,11 +24,24 @@ export async function POST(request: Request) {
     );
   }
   const messageId = await sendEmail(to, subject, body);
+  let embedding: number[] | null = null;
+  try {
+    embedding = await embed(`${subject}\n\n${body}`);
+  } catch (e) {
+    console.error("embedding failed,saving without it:", e);
+  }
   await pool.query(
     `
-    INSERT INTO emails (user_id, recipient_email, subject, body, tone)
-    VALUES ($1,$2,$3,$4,$5)`,
-    [userId, to, subject, body, tone ?? null],
+    INSERT INTO emails (user_id, recipient_email, subject, body, tone, embedding)
+    VALUES ($1,$2,$3,$4,$5,$6)`,
+    [
+      userId,
+      to,
+      subject,
+      body,
+      tone ?? null,
+      embedding ? JSON.stringify(embedding) : null,
+    ],
   );
   return Response.json({ ok: true, messageId });
 }
