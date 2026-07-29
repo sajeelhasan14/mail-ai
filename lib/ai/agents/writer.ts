@@ -10,6 +10,11 @@ export const emailSchema = z.object({
   tone: z
     .enum(["professional", "friendly", "casual", "angry", "frustrated"])
     .describe("The tone used in the email"),
+  usedContext: z
+    .string()
+    .describe(
+      "Briefly state what past-email context you used (tone, subjects), or 'none'",
+    ),
 });
 
 export const WriterAgent = new Agent({
@@ -22,4 +27,5 @@ Before writing, call the lookup_recipient_context tool with the recipient's emai
   model: MODEL,
   tools: [lookupRecipientContext],
   outputType: emailSchema,
+  
 });

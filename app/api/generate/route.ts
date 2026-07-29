@@ -18,6 +18,7 @@ export async function POST(request: Request) {
   }
   try {
     const email = await generateEmail(input, user.id, to ?? "");
+    console.log(email?.usedContext);
     return Response.json({ email });
   } catch (err) {
     console.error(err);
