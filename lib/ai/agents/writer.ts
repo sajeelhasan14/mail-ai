@@ -4,6 +4,7 @@ import { z } from "zod";
 import { MODEL } from "../setup";
 import { lookupRecipientContext } from "../tools/lookupRecipientContext";
 import { searchPreviousThreads } from "../tools/searchPreviousThreads";
+import { findMyTemplate } from "../tools/findMyTemplate";
 
 export const emailSchema = z.object({
   subject: z.string().describe("The subject line of the email"),
@@ -28,9 +29,13 @@ Before writing, call the lookup_recipient_context tool with the recipient's emai
 - If the task refers to an earlier conversation with this person ("follow up on the
   payment we discussed", "as I mentioned before"), call search_previous_threads with a
   short description of the topic, and use the matching thread's details in the email.
+- ONLY if the user explicitly asks to reuse or mirror a previous email, call find_my_template.
+  Use it as a STYLE and STRUCTURE reference — adapt names, dates, and amounts to the current
+  recipient. Never copy facts or commitments that belonged to a different person.
+
 
 `,
   model: MODEL,
-  tools: [lookupRecipientContext, searchPreviousThreads],
+  tools: [lookupRecipientContext, searchPreviousThreads, findMyTemplate],
   outputType: emailSchema,
 });
