@@ -32,7 +32,7 @@ export async function generateEmail(
       await run(
         WriterAgent,
         `${input}\nPrevious: ${JSON.stringify(draft)}\nFix: ${review.feedback}`,
-        { context: userId },
+        { context: { userId, recipientEmail } },
       )
     ).finalOutput;
   }

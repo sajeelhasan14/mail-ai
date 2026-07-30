@@ -24,9 +24,13 @@ export const WriterAgent = new Agent({
 
 Before writing, call the lookup_recipient_context tool with the recipient's email address to check past emails to that person.
 - If there is history (known: true), match the tone you usually use with them.
-- If there is no history (known: false), just write normally.`,
+- If there is no history (known: false), just write normally.
+- If the task refers to an earlier conversation with this person ("follow up on the
+  payment we discussed", "as I mentioned before"), call search_previous_threads with a
+  short description of the topic, and use the matching thread's details in the email.
+
+`,
   model: MODEL,
-  tools: [lookupRecipientContext,searchPreviousThreads],
+  tools: [lookupRecipientContext, searchPreviousThreads],
   outputType: emailSchema,
-  
 });
