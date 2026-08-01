@@ -5,6 +5,7 @@ import { MODEL } from "../setup";
 import { lookupRecipientContext } from "../tools/lookupRecipientContext";
 import { searchPreviousThreads } from "../tools/searchPreviousThreads";
 import { findMyTemplate } from "../tools/findMyTemplate";
+import { lookupGmailHistory } from "../tools/lookupGmailHistory";
 
 export const emailSchema = z.object({
   subject: z.string().describe("The subject line of the email"),
@@ -32,10 +33,15 @@ Before writing, call the lookup_recipient_context tool with the recipient's emai
 - ONLY if the user explicitly asks to reuse or mirror a previous email, call find_my_template.
   Use it as a STYLE and STRUCTURE reference — adapt names, dates, and amounts to the current
   recipient. Never copy facts or commitments that belonged to a different person.
-
-
+  - To ground the email in real history, call lookup_gmail_history with the recipient to see
+  actual past Gmail messages (their replies and yours). Use their real words and details.
 `,
   model: MODEL,
-  tools: [lookupRecipientContext, searchPreviousThreads, findMyTemplate],
+  tools: [
+    lookupRecipientContext,
+    searchPreviousThreads,
+    findMyTemplate,
+    lookupGmailHistory,
+  ],
   outputType: emailSchema,
 });
