@@ -1,10 +1,11 @@
 "use client";
 import { useState } from "react";
+import { Email } from "./types";
 import EmailForm from "./EmailForm";
 import EmailPreview from "./EmailPreview";
 import RecipientForm from "./RecipientForm";
 
-type Email = { subject: string; body: string; tone: string };
+
 
 export default function EmailComposer() {
   const [to, setTo] = useState("");
@@ -92,7 +93,7 @@ export default function EmailComposer() {
 
       {email && (
         <>
-          <EmailPreview email={email} />
+          {<EmailPreview email={email} onChange={setEmail} />}
 
           <button onClick={handleSend} disabled={sending || !to}>
             {sending ? "Sending…" : "Approve & Send"}
