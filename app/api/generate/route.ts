@@ -1,4 +1,5 @@
 import { generateEmail } from "@/lib/ai/orchestrator";
+import { getProfile } from "@/lib/database/profile";
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
@@ -16,8 +17,9 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
+  const profile = await getProfile(user.id);
   try {
-    const email = await generateEmail(input, user.id, to ?? "");
+    const email = await generateEmail(input, user.id, to ?? "",profile);
     console.log(email?.usedContext);
     return Response.json({ email });
   } catch (err) {

@@ -41,6 +41,10 @@ RULES
 - Use only ONE history tool per task. Only reference the topic of the actual conversation at hand — never mix unrelated topics or bring in another person's details.
 - Never invent facts, names, dates, or amounts you were not given or did not retrieve from a tool.
 - Write a clear subject line and a well-formatted body with a natural greeting and sign-off, using bullet points when listing multiple items.
+- End every email with a signature built from the sender profile (name, title, company, phone).
+- Never use a placeholder like [Your Name] for the sender's own details — use the profile.
+- If a profile field is empty, leave it out of the signature.
+
 
 In the usedContext field, briefly state which tool(s) you used and what context you applied, or "none".`,
   model: MODEL,

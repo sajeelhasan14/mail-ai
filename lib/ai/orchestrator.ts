@@ -13,8 +13,9 @@ export async function generateEmail(
   description: string,
   userId: string,
   recipientEmail: string,
+  profile: string,
 ) {
-  const input = `Recipient: ${recipientEmail}\n\nTask: ${description}`;
+  const input = `Sender profile: ${JSON.stringify(profile)}\n\nRecipient: ${recipientEmail}\n\nTask: ${description}`;
   let draft = (
     await run(WriterAgent, input, { context: { userId, recipientEmail } })
   ).finalOutput;

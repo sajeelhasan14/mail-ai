@@ -8,7 +8,7 @@ export const lookupRecipientContext = tool({
     "Find past emails to this recipient to match the tone you usually use.",
   parameters: z.object({ email: z.string() }),
   async execute({ email }, runContext) {
-    console.log("🔧 tool fired for", email);
+    console.log("🔧 tool for tone fired for", email);
     const userId = (runContext?.context as { userId?: string })?.userId;
     if (!userId) return { known: false };
     const { rows } = await pool.query(

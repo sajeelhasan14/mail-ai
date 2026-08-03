@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { pool } from "@/lib/database/db";
+import { getProfile } from "@/lib/database/profile";
 
 export async function GET() {
   const supabase = await createClient();
@@ -8,15 +9,8 @@ export async function GET() {
   } = await supabase.auth.getUser();
   if (!user) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { rows } = await pool.query(
-    `
-        SELECT full_name, phone,title,company
-        FROM profiles
-        WHERE user_id = $1
-        `,
-    [user.id],
-  );
-  return Response.json({ profile: rows[0] ?? {} });
+  const profile = await getProfile(user.id);
+  return Response.json({ profile });
 }
 
 export async function POST(request: Request) {
@@ -37,7 +31,7 @@ export async function POST(request: Request) {
             full_name = excluded.full_name,
             phone = excluded.phone,
             title = excluded.title,
-            company = exclude.company
+            company = excluded.company
             `,
     [user.id, full_name ?? null, phone ?? null, title ?? null, company ?? null],
   );

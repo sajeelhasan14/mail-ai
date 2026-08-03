@@ -9,7 +9,7 @@ export const searchPreviousThreads = tool({
     "Semantically search my past emails by meaning to find related earlier conversations.",
   parameters: z.object({ query: z.string() }),
   async execute({ query }, runContext) {
-    console.log("🔧 tool fired for", query);
+    console.log("🔧 tool for previous chat from my db fired for", query);
     const context = runContext?.context as {
       userId?: string;
       recipientEmail?: string;

@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Profile = {
   full_name: string;
@@ -9,6 +10,7 @@ type Profile = {
 };
 
 export default function SettingsPage() {
+  const router = useRouter();
   const [profile, setProfile] = useState<Profile>({
     full_name: "",
     title: "",
@@ -30,12 +32,18 @@ export default function SettingsPage() {
       body: JSON.stringify(profile),
     });
     setSaved(true);
+    router.push("/");
   }
 
   return (
     <div style={{ maxWidth: 480, margin: "40px auto", padding: 20 }}>
       <h1>Your Profile</h1>
       <p>Used to sign your emails.</p>
+      {!profile.full_name && (
+        <p style={{ background: "#eef", padding: 10, borderRadius: 6 }}>
+          👋 Welcome! Set up your signature so your emails are signed correctly.
+        </p>
+      )}
       {(["full_name", "title", "company", "phone"] as const).map((f) => (
         <input
           key={f}

@@ -15,6 +15,7 @@ export const findMyTemplate = tool({
       ),
   }),
   async execute({ query }, runContext) {
+    console.log("tool fired: Find My Template")
     const userId = (runContext?.context as { userId?: string }).userId;
     if (!userId) return { found: false };
     const queryVector = await embed(query);
