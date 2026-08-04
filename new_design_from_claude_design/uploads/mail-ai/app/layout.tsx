@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
-import { Archivo_Black, Space_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const archivo = Archivo_Black({
-  weight: "400",
+const geistSans = Geist({
+  variable: "--font-geist-sans",
   subsets: ["latin"],
-  variable: "--font-archivo",
 });
 
-const spaceMono = Space_Mono({
-  weight: ["400", "700"],
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
-  variable: "--font-space-mono",
 });
 
 export const metadata: Metadata = {
@@ -28,9 +26,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${archivo.variable} ${spaceMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #f4f4f0; }
+  a { color: #000; }
+  a:hover { color: #00d95f; }
+  ::selection { background: #f8e800; }
+  input:focus { outline: 3px solid #00d95f; outline-offset: -3px; }
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #f4f4f0; color: #000; font-family: 'Space Mono', monospace" data-screen-label="Settings">
+
+  <nav style="display: flex; align-items: center; justify-content: space-between; background: #f4f4f0; border-bottom: 4px solid #000; padding: 0 24px; height: 72px; position: sticky; top: 0; z-index: 10">
+    <a href="Composer.dc.html" style="display: flex; align-items: center; gap: 14px; text-decoration: none" style-hover="color: #000">
+      <div style="background: #00d95f; border: 3px solid #000; width: 40px; height: 40px; display: grid; place-items: center; box-shadow: 4px 4px 0 #000; font-family: 'Archivo Black', sans-serif; font-size: 22px; line-height: 1">@</div>
+      <span style="font-family: 'Archivo Black', sans-serif; font-size: 26px; letter-spacing: -0.5px; text-transform: uppercase">Mail-AI</span>
+    </a>
+    <div style="display: flex; align-items: center; gap: 16px">
+      <a href="Composer.dc.html" style="font-weight: 700; font-size: 14px; text-transform: uppercase; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 3px"><span style="color: #1a3cff">←</span> Composer</a>
+      <a href="Login.dc.html" style="display: inline-block; background: #f4f4f0; border: 3px solid #000; box-shadow: 4px 4px 0 #000; padding: 8px 16px; font-weight: 700; font-size: 14px; text-transform: uppercase; text-decoration: none; cursor: pointer" style-hover="transform: translate(2px,2px); box-shadow: 2px 2px 0 #000; color: #000">Sign out</a>
+    </div>
+  </nav>
+
+  <main style="max-width: 620px; margin: 0 auto; padding: 48px 24px 96px; display: flex; flex-direction: column; gap: 28px">
+    <header style="display: flex; flex-direction: column; gap: 8px">
+      <h1 style="font-family: 'Archivo Black', sans-serif; font-size: 44px; margin: 0; line-height: 1; text-transform: uppercase">Your <span style="background: #f8e800; padding: 0 8px">profile</span></h1>
+      <p style="margin: 0; font-size: 14px">Used to sign your emails.</p>
+    </header>
+
+    <sc-if value="{{ firstTime }}" hint-placeholder-val="{{ true }}">
+      <div style="border: 3px solid #000; background: #f8e800; box-shadow: 6px 6px 0 #000; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px">
+        <span style="font-family: 'Archivo Black', sans-serif; font-size: 16px; text-transform: uppercase">👋 Welcome</span>
+        <span style="font-size: 13px; font-weight: 700">Set up your signature to get started — it goes at the bottom of every email.</span>
+      </div>
+    </sc-if>
+
+    <section style="border: 4px solid #000; background: #fff; box-shadow: 8px 8px 0 #000; padding: 28px; display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <label for="f-name" style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px"><span style="color: #1a3cff">▸</span> Full name</label>
+        <input id="f-name" value="{{ fullName }}" onChange="{{ onName }}" placeholder="Alex Rivera" style="border: 3px solid #000; background: #fff; padding: 13px 16px; font-family: 'Space Mono', monospace; font-size: 15px; box-shadow: 4px 4px 0 #000; width: 100%; box-sizing: border-box" />
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <label for="f-title" style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px"><span style="color: #1a3cff">▸</span> Job title</label>
+        <input id="f-title" value="{{ title }}" onChange="{{ onTitle }}" placeholder="Product Lead" style="border: 3px solid #000; background: #fff; padding: 13px 16px; font-family: 'Space Mono', monospace; font-size: 15px; box-shadow: 4px 4px 0 #000; width: 100%; box-sizing: border-box" />
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <label for="f-company" style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px"><span style="color: #1a3cff">▸</span> Company</label>
+        <input id="f-company" value="{{ company }}" onChange="{{ onCompany }}" placeholder="Northwind" style="border: 3px solid #000; background: #fff; padding: 13px 16px; font-family: 'Space Mono', monospace; font-size: 15px; box-shadow: 4px 4px 0 #000; width: 100%; box-sizing: border-box" />
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <label for="f-phone" style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px"><span style="color: #1a3cff">▸</span> Phone</label>
+        <input id="f-phone" value="{{ phone }}" onChange="{{ onPhone }}" placeholder="(555) 010-4432" style="border: 3px solid #000; background: #fff; padding: 13px 16px; font-family: 'Space Mono', monospace; font-size: 15px; box-shadow: 4px 4px 0 #000; width: 100%; box-sizing: border-box" />
+      </div>
+      <div style="display: flex; align-items: center; gap: 16px; margin-top: 4px">
+        <button onClick="{{ onSave }}" disabled="{{ saveDisabled }}" style="background: #00d95f; color: #000; border: 3px solid #000; box-shadow: 6px 6px 0 #000; padding: 14px 32px; font-family: 'Archivo Black', sans-serif; font-size: 16px; text-transform: uppercase; cursor: pointer; opacity: {{ saveOpacity }}" style-hover="transform: translate(3px,3px); box-shadow: 3px 3px 0 #000" style-active="transform: translate(6px,6px); box-shadow: 0 0 0 #000">Save</button>
+        <sc-if value="{{ saved }}" hint-placeholder-val="{{ false }}">
+          <span style="font-weight: 700; font-size: 14px; text-transform: uppercase">✅ Saved</span>
+        </sc-if>
+      </div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;firstTimeUser&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Demo&quot;}}">
+class Component extends DCLogic {
+  state = { fullName: "", title: "", company: "", phone: "", saved: false };
+  renderVals() {
+    const s = this.state;
+    const set = (k) => (e) => this.setState({ [k]: e.target.value, saved: false });
+    return {
+      fullName: s.fullName, title: s.title, company: s.company, phone: s.phone,
+      onName: set("fullName"), onTitle: set("title"), onCompany: set("company"), onPhone: set("phone"),
+      firstTime: (this.props.firstTimeUser ?? true) && !s.saved,
+      saved: s.saved,
+      saveDisabled: !s.fullName.trim(),
+      saveOpacity: s.fullName.trim() ? 1 : 0.5,
+      onSave: () => { if (s.fullName.trim()) this.setState({ saved: true }); },
+    };
+  }
+}
+</script>
+</body>
+</html>
