@@ -1,15 +1,19 @@
+import Input from "../ui/Input";
+
 type RecipientFormProps = {
   value: string;
   onChange: (value: string) => void;
 };
+
 export default function RecipientForm({ value, onChange }: RecipientFormProps) {
   return (
-    <input
+    <Input
+      id="to-input"
       type="email"
+      label="To ▸ recipient email"
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      placeholder="Recipient email (e.g. sara@acme.com)"
-      style={{ width: "100%", padding: 8, marginTop: 12 }}
+      placeholder="sara@acme.com"
     />
   );
 }

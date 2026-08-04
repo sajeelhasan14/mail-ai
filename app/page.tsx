@@ -15,7 +15,7 @@ export default async function Home() {
   if (!profile.full_name) redirect("/settings");
 
   return (
-    <div>
+    <div className="min-h-screen bg-[#f4f4f0]">
       <Navbar />
       <EmailComposer />
     </div>
