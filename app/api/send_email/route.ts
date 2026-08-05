@@ -3,6 +3,9 @@ import { pool } from "@/lib/database/db";
 import { sendEmail } from "@/lib/mailer/mailer";
 import { createClient } from "@/lib/supabase/server";
 
+export const maxDuration = 60;   // seconds
+
+
 export async function POST(request: Request) {
   // user ki uuid from supabase
   const supabase = await createClient();

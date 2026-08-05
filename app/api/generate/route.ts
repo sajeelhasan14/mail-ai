@@ -2,6 +2,9 @@ import { generateEmail } from "@/lib/ai/orchestrator";
 import { getProfile } from "@/lib/database/profile";
 import { createClient } from "@/lib/supabase/server";
 
+export const maxDuration = 60;   // seconds
+
+
 export async function POST(request: Request) {
   const supabase = await createClient();
   const {
