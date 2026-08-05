@@ -20,11 +20,11 @@ export async function POST(request: Request) {
   } = await supabase.auth.getUser();
   if (!user) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { full_name, phone, title, company } = await request.json();
+  const { full_name, phone, title, company, about } = await request.json();
   await pool.query(
     `
-        INSERT INTO profiles (user_id,full_name,phone,title,company)
-        VALUES ($1,$2,$3,$4,$5)
+        INSERT INTO profiles (user_id,full_name,phone,title,company,about)
+        VALUES ($1,$2,$3,$4,$5,$6)
         ON CONFLICT (user_id)
         DO UPDATE
         SET
@@ -32,8 +32,16 @@ export async function POST(request: Request) {
             phone = excluded.phone,
             title = excluded.title,
             company = excluded.company
+            about = excluded.about
             `,
-    [user.id, full_name ?? null, phone ?? null, title ?? null, company ?? null],
+    [
+      user.id,
+      full_name ?? null,
+      phone ?? null,
+      title ?? null,
+      company ?? null,
+      about ?? null,
+    ],
   );
   return Response.json({ ok: true });
 }

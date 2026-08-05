@@ -5,12 +5,13 @@ export type profile = {
   phone?: String;
   title?: string;
   company?: string;
+  about?: string;
 };
 
 export async function getProfile(userId: string) {
   const { rows } = await pool.query(
     `
-        SELECT full_name,phone,title,company
+        SELECT full_name,phone,title,company,about
         FROM profiles
         WHERE user_id = $1
         `,

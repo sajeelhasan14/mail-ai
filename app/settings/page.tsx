@@ -10,6 +10,7 @@ type Profile = {
   title: string;
   company: string;
   phone: string;
+  about: string;
 };
 
 const FIELDS: { key: keyof Profile; label: string; placeholder: string }[] = [
@@ -17,6 +18,12 @@ const FIELDS: { key: keyof Profile; label: string; placeholder: string }[] = [
   { key: "title", label: "Job title", placeholder: "Product Lead" },
   { key: "company", label: "Company", placeholder: "Northwind" },
   { key: "phone", label: "Phone", placeholder: "(555) 010-4432" },
+  {
+    key: "about",
+    label: "About you",
+    placeholder:
+      "Tell the agent who you are — your role, what you're working on, your goals.It'll use this when relevant. e.g. 'Software engineering student at UBIT, looking forinternships, built a SaaS product with React & Next.js.'",
+  },
 ];
 
 export default function SettingsPage() {
@@ -26,6 +33,7 @@ export default function SettingsPage() {
     title: "",
     company: "",
     phone: "",
+    about: "",
   });
   const [firstTime, setFirstTime] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -40,6 +48,7 @@ export default function SettingsPage() {
           title: p.title ?? "",
           company: p.company ?? "",
           phone: p.phone ?? "",
+          about: p.about ?? "",
         });
         setFirstTime(!p.full_name);
       });
@@ -63,14 +72,19 @@ export default function SettingsPage() {
           <h1 className="font-heading text-[44px] uppercase leading-none text-black">
             Your profile
           </h1>
-          <p className="font-mono text-sm text-black">Used to sign your emails.</p>
+          <p className="font-mono text-sm text-black">
+            Used to sign your emails.
+          </p>
         </header>
 
         {firstTime && (
           <div className="flex flex-col gap-1 border-[3px] border-black bg-[#f8e800] px-5 py-4 shadow-[6px_6px_0_#000]">
-            <span className="font-heading text-base uppercase text-black">👋 Welcome</span>
+            <span className="font-heading text-base uppercase text-black">
+              👋 Welcome
+            </span>
             <span className="font-mono text-[13px] font-bold text-black">
-              Set up your signature to get started — it goes at the bottom of every email.
+              Set up your signature to get started — it goes at the bottom of
+              every email.
             </span>
           </div>
         )}
@@ -90,11 +104,17 @@ export default function SettingsPage() {
             />
           ))}
           <div className="mt-1 flex items-center gap-4">
-            <Button variant="primary" onClick={save} disabled={!profile.full_name?.trim()}>
+            <Button
+              variant="primary"
+              onClick={save}
+              disabled={!profile.full_name?.trim()}
+            >
               Save
             </Button>
             {saved && (
-              <span className="font-mono text-sm font-bold uppercase text-black">✅ Saved</span>
+              <span className="font-mono text-sm font-bold uppercase text-black">
+                ✅ Saved
+              </span>
             )}
           </div>
         </section>
