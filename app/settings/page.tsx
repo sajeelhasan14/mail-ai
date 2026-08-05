@@ -34,8 +34,14 @@ export default function SettingsPage() {
     fetch("/api/profile")
       .then((r) => r.json())
       .then((d) => {
-        setProfile((p) => ({ ...p, ...d.profile }));
-        setFirstTime(!d.profile?.full_name);
+        const p = d.profile ?? {};
+        setProfile({
+          full_name: p.full_name ?? "",
+          title: p.title ?? "",
+          company: p.company ?? "",
+          phone: p.phone ?? "",
+        });
+        setFirstTime(!p.full_name);
       });
   }, []);
 
@@ -84,7 +90,7 @@ export default function SettingsPage() {
             />
           ))}
           <div className="mt-1 flex items-center gap-4">
-            <Button variant="primary" onClick={save} disabled={!profile.full_name.trim()}>
+            <Button variant="primary" onClick={save} disabled={!profile.full_name?.trim()}>
               Save
             </Button>
             {saved && (
