@@ -31,7 +31,7 @@ export async function POST(request: Request) {
             full_name = excluded.full_name,
             phone = excluded.phone,
             title = excluded.title,
-            company = excluded.company
+            company = excluded.company,
             about = excluded.about
             `,
     [
