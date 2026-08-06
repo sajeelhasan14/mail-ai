@@ -1,41 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Navbar from "../components/layout/Navbar";
-import Input from "../components/ui/Input";
-import Button from "../components/ui/Button";
-
-type Profile = {
-  full_name: string;
-  title: string;
-  company: string;
-  phone: string;
-  about: string;
-};
-
-const FIELDS: { key: keyof Profile; label: string; placeholder: string }[] = [
-  { key: "full_name", label: "Full name", placeholder: "Alex Rivera" },
-  { key: "title", label: "Job title", placeholder: "Product Lead" },
-  { key: "company", label: "Company", placeholder: "Northwind" },
-  { key: "phone", label: "Phone", placeholder: "(555) 010-4432" },
-  {
-    key: "about",
-    label: "About you",
-    placeholder:
-      "Tell the agent who you are — your role, what you're working on, your goals.It'll use this when relevant. e.g. 'Software engineering student at UBIT, looking forinternships, built a SaaS product with React & Next.js.'",
-  },
-];
+import PersonaView from "../components/persona/PersonaView";
+import PersonaForm from "../components/persona/PersonaForm";
+import { Persona, EMPTY_PERSONA } from "../components/persona/types";
 
 export default function SettingsPage() {
-  const router = useRouter();
-  const [profile, setProfile] = useState<Profile>({
-    full_name: "",
-    title: "",
-    company: "",
-    phone: "",
-    about: "",
-  });
-  const [firstTime, setFirstTime] = useState(false);
+  const [persona, setPersona] = useState<Persona>(EMPTY_PERSONA);
+  const [savedPersona, setSavedPersona] = useState<Persona>(EMPTY_PERSONA);
+  const [editing, setEditing] = useState(false);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
@@ -43,25 +16,35 @@ export default function SettingsPage() {
       .then((r) => r.json())
       .then((d) => {
         const p = d.profile ?? {};
-        setProfile({
+        const clean: Persona = {
           full_name: p.full_name ?? "",
           title: p.title ?? "",
           company: p.company ?? "",
           phone: p.phone ?? "",
           about: p.about ?? "",
-        });
-        setFirstTime(!p.full_name);
+        };
+        setPersona(clean);
+        setSavedPersona(clean);
+        setEditing(!clean.full_name);
       });
   }, []);
+
+  const isDirty = JSON.stringify(persona) !== JSON.stringify(savedPersona);
 
   async function save() {
     await fetch("/api/profile", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(profile),
+      body: JSON.stringify(persona),
     });
+    setSavedPersona(persona);
+    setEditing(false);
     setSaved(true);
-    router.push("/");
+  }
+
+  function cancel() {
+    setPersona(savedPersona);
+    setEditing(false);
   }
 
   return (
@@ -70,54 +53,31 @@ export default function SettingsPage() {
       <main className="mx-auto flex max-w-[620px] flex-col gap-7 px-6 pb-24 pt-12">
         <header className="flex flex-col gap-2">
           <h1 className="font-heading text-[44px] uppercase leading-none text-black">
-            Your profile
+            Persona
           </h1>
           <p className="font-mono text-sm text-black">
-            Used to sign your emails.
+            Who you are — used to sign and personalize your emails.
           </p>
         </header>
 
-        {firstTime && (
-          <div className="flex flex-col gap-1 border-[3px] border-black bg-[#f8e800] px-5 py-4 shadow-[6px_6px_0_#000]">
-            <span className="font-heading text-base uppercase text-black">
-              👋 Welcome
-            </span>
-            <span className="font-mono text-[13px] font-bold text-black">
-              Set up your signature to get started — it goes at the bottom of
-              every email.
-            </span>
-          </div>
+        {editing ? (
+          <PersonaForm
+            persona={persona}
+            onChange={setPersona}
+            onSave={save}
+            onCancel={cancel}
+            isDirty={isDirty}
+            canCancel={!!savedPersona.full_name}
+          />
+        ) : (
+          <PersonaView persona={persona} onEdit={() => setEditing(true)} />
         )}
 
-        <section className="flex flex-col gap-5 border-4 border-black bg-white p-7 shadow-[8px_8px_0_#000]">
-          {FIELDS.map((f) => (
-            <Input
-              key={f.key}
-              id={`f-${f.key}`}
-              label={f.label}
-              placeholder={f.placeholder}
-              value={profile[f.key] ?? ""}
-              onChange={(e) => {
-                setProfile({ ...profile, [f.key]: e.target.value });
-                setSaved(false);
-              }}
-            />
-          ))}
-          <div className="mt-1 flex items-center gap-4">
-            <Button
-              variant="primary"
-              onClick={save}
-              disabled={!profile.full_name?.trim()}
-            >
-              Save
-            </Button>
-            {saved && (
-              <span className="font-mono text-sm font-bold uppercase text-black">
-                ✅ Saved
-              </span>
-            )}
-          </div>
-        </section>
+        {saved && !editing && (
+          <span className="font-mono text-sm font-bold uppercase text-black">
+            ✅ Saved
+          </span>
+        )}
       </main>
     </div>
   );

@@ -35,7 +35,7 @@ export default function Navbar() {
           href="/settings"
           className="font-mono text-sm font-bold uppercase text-black underline decoration-[3px] underline-offset-4 hover:text-[#00d95f]"
         >
-          Settings
+          Persona
         </Link>
         {avatar && (
           <img
