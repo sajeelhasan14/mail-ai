@@ -3,8 +3,7 @@ import { pool } from "@/lib/database/db";
 import { sendEmail } from "@/lib/mailer/mailer";
 import { createClient } from "@/lib/supabase/server";
 
-export const maxDuration = 60;   // seconds
-
+export const maxDuration = 60; // seconds
 
 export async function POST(request: Request) {
   // user ki uuid from supabase
@@ -18,6 +17,26 @@ export async function POST(request: Request) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
   const userId = user.id;
+  const from = user.email;
+
+  const { rows } = await pool.query(
+    `
+    SELECT gmail_refresh_token
+    FROM profile
+    WHERE user_id = $!,
+    `,
+    [userId],
+  );
+  const refreshToken = rows[0]?.gmail_refresh_token;
+  if (!from || !refreshToken) {
+    return Response.json(
+      {
+        error:
+          "Gmail not connected — sign out and back in to grant send access.",
+      },
+      { status: 400 },
+    );
+  }
 
   const { to, subject, body, tone } = await request.json();
   if (!to || !subject || !body) {
@@ -26,7 +45,7 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
-  const messageId = await sendEmail(to, subject, body);
+  const messageId = await sendEmail(from, refreshToken, to, subject, body);
   let embedding: number[] | null = null;
   try {
     embedding = await embed(`${subject}\n\n${body}`);
