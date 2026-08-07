@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     `
     SELECT gmail_refresh_token
     FROM profiles
-    WHERE user_id = $1,
+    WHERE user_id = $1
     `,
     [userId],
   );
