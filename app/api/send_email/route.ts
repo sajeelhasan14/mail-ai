@@ -22,8 +22,8 @@ export async function POST(request: Request) {
   const { rows } = await pool.query(
     `
     SELECT gmail_refresh_token
-    FROM profile
-    WHERE user_id = $!,
+    FROM profiles
+    WHERE user_id = $1,
     `,
     [userId],
   );
