@@ -38,14 +38,14 @@ export async function POST(request: Request) {
     );
   }
 
-  const { to, subject, body, tone } = await request.json();
+  const { to, subject, body, tone,attachments } = await request.json();
   if (!to || !subject || !body) {
     return Response.json(
       { error: "to, subject, and body are required" },
       { status: 400 },
     );
   }
-  const messageId = await sendEmail(from, refreshToken, to, subject, body);
+  const messageId = await sendEmail(from, refreshToken, to, subject, body,attachments ?? []);
   let embedding: number[] | null = null;
   try {
     embedding = await embed(`${subject}\n\n${body}`);

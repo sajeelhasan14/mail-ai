@@ -1,4 +1,7 @@
-import nodemailer from "nodemailer";
+import MailComposer from "nodemailer/lib/mail-composer";
+import { getGmailClient } from "../gmail";
+
+type Attachment = { filename: string; content: string };
 
 export async function sendEmail(
   from: string,
@@ -6,17 +9,25 @@ export async function sendEmail(
   to: string,
   subject: string,
   body: string,
+  attachements: Attachment[] = [],
 ) {
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      type: "OAuth2",
-      user: from,
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      refreshToken,
-    },
+  const mail = new MailComposer({
+    from,
+    to,
+    subject,
+    text: body,
+    attachments: attachements.map((a) => ({
+      filename: a.filename,
+      content: a.content,
+      encoding: "base64",
+    })),
   });
-  const info = await transporter.sendMail({ from, to, subject, text: body });
-  return info.messageId;
+  const raw = (await mail.compile().build()).toString("base64url");
+  const gmail = getGmailClient(refreshToken);
+
+  const res = await gmail.users.messages.send({
+    userId: "me",
+    requestBody: { raw }
+  });
+  return res.data.id
 }

@@ -6,10 +6,20 @@ import EmailPreview from "./EmailPreview";
 import RecipientForm from "./RecipientForm";
 import Button from "../ui/Button";
 
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve((reader.result as string).split(",")[1]); // drop "data:...;base64,"
+    reader.readAsDataURL(file);
+  });
+}
+
 export default function EmailComposer() {
   const [to, setTo] = useState("");
   const [sent, setSent] = useState(false);
   const [input, setInput] = useState("");
+  const [files, setFiles] = useState<File[]>([]);
+
   const [email, setEmail] = useState<Email | null>(null);
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
@@ -48,10 +58,23 @@ export default function EmailComposer() {
     setSending(true);
     setError(null);
     try {
+      const attachments = await Promise.all(
+        files.map(async (f) => ({
+          filename: f.name,
+          content: await fileToBase64(f),
+        })),
+      );
+
       const res = await fetch("/api/send_email", {
         method: "POST",
         headers: { "Content-type": "application/json" },
-        body: JSON.stringify({ to, subject: email.subject, body: email.body, tone: email.tone }),
+        body: JSON.stringify({
+          to,
+          subject: email.subject,
+          body: email.body,
+          tone: email.tone,
+          attachments,
+        }),
       });
       if (!res.ok) throw new Error("Send failed: " + res.status);
       setSent(true);
@@ -69,12 +92,15 @@ export default function EmailComposer() {
     setTo("");
     setSent(false);
     setError(null);
+    setFiles([]);
   }
 
   return (
     <main className="mx-auto flex max-w-[780px] flex-col gap-8 px-6 pb-24 pt-12">
       <header className="flex flex-col gap-2">
-        <h1 className="font-heading text-[44px] uppercase leading-none text-black">Write an <span className="bg-[#f8e800] px-2">email</span></h1>
+        <h1 className="font-heading text-[44px] uppercase leading-none text-black">
+          Write an <span className="bg-[#f8e800] px-2">email</span>
+        </h1>
         <p className="font-mono text-sm text-black">
           Two agents draft + review. You approve. It sends from your Gmail.
         </p>
@@ -88,9 +114,15 @@ export default function EmailComposer() {
           onChange={setInput}
           onSubmit={handleGenerate}
           loading={loading}
-          label={email ? "Revise ▸ tell the agents what to change" : "Brief ▸ describe the email"}
+          label={
+            email
+              ? "Revise ▸ tell the agents what to change"
+              : "Brief ▸ describe the email"
+          }
           placeholder={
-            email ? "e.g. make it shorter and more formal" : "Describe the email you want…"
+            email
+              ? "e.g. make it shorter and more formal"
+              : "Describe the email you want…"
           }
           submitlabel={email ? "Revise" : "Generate Email"}
         />
@@ -106,22 +138,77 @@ export default function EmailComposer() {
 
       {!email && !loading && (
         <section className="flex flex-col items-center gap-2.5 border-[3px] border-dashed border-black px-8 py-12 text-center">
-          <div className="font-heading text-2xl uppercase text-black">No draft yet</div>
+          <div className="font-heading text-2xl uppercase text-black">
+            No draft yet
+          </div>
           <p className="max-w-[420px] font-mono text-sm text-black">
-            Describe the email above — e.g. “Ask Sara to move Friday’s demo to 3pm, keep it
-            friendly.” The draft appears here for you to edit.
+            Describe the email above — e.g. “Ask Sara to move Friday’s demo to
+            3pm, keep it friendly.” The draft appears here for you to edit.
           </p>
         </section>
       )}
 
       {email && (
         <section className="flex flex-col gap-6">
-          <EmailPreview email={email} onChange={(e) => { setEmail(e); setSent(false); }} />
+          <EmailPreview
+            email={email}
+            onChange={(e) => {
+              setEmail(e);
+              setSent(false);
+            }}
+          />
+          {/* Attach files */}
+          <div className="flex flex-col gap-2">
+            <label className="w-fit cursor-pointer border-[3px] border-black bg-[#f4f4f0] px-4 py-2 font-mono text-xs font-bold uppercase text-black shadow-[3px_3px_0_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0_#000]">
+              ▸ Attach files
+              <input
+                type="file"
+                multiple
+                className="hidden"
+                onChange={(e) =>
+                  setFiles((prev) => [
+                    ...prev,
+                    ...Array.from(e.target.files ?? []),
+                  ])
+                }
+              />
+            </label>
+
+            {files.length > 0 && (
+              <ul className="flex flex-col gap-1">
+                {files.map((f, i) => (
+                  <li
+                    key={i}
+                    className="flex items-center gap-2 font-mono text-xs text-black"
+                  >
+                    📎 {f.name}
+                    <button
+                      onClick={() =>
+                        setFiles(files.filter((_, idx) => idx !== i))
+                      }
+                      className="border-2 border-black px-1.5 font-bold"
+                    >
+                      ×
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
           <div className="flex flex-wrap items-center gap-4">
-            <Button variant="accent" onClick={handleSend} disabled={sending || !to}>
+            <Button
+              variant="accent"
+              onClick={handleSend}
+              disabled={sending || !to}
+            >
               {sending ? "Sending…" : "Approve & Send"}
             </Button>
-            <Button variant="secondary" onClick={handleNewEmail} disabled={loading || sending}>
+            <Button
+              variant="secondary"
+              onClick={handleNewEmail}
+              disabled={loading || sending}
+            >
               New email
             </Button>
           </div>
