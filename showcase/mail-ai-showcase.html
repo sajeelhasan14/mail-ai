@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mail-AI — Project Showcase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #00d95f;
+    --yellow: #f8e800;
+    --bg: #f4f4f0;
+    --black: #111;
+    --white: #ffffff;
+    --border: 3px solid #111;
+    --font-mono: 'Space Mono', monospace;
+    --font-sans: 'Inter', system-ui, sans-serif;
+  }
+
+  @page { size: A4; margin: 0; }
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { page-break-after: always; page-break-inside: avoid; }
+    .page:last-child { page-break-after: auto; }
+  }
+
+  body { background: var(--bg); color: var(--black); font-family: var(--font-sans); line-height: 1.5; }
+
+  .page {
+    width: 210mm; min-height: 297mm; max-height: 297mm;
+    position: relative; overflow: hidden;
+    background: var(--bg); margin: 0 auto;
+  }
+
+  .page-num {
+    position: absolute; bottom: 20px; right: 36px;
+    font-family: var(--font-mono); font-size: 11px; color: #bbb;
+  }
+
+  .sec-label {
+    font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 3px; color: var(--green); margin-bottom: 4px;
+  }
+
+  .sec-title {
+    font-size: 32px; font-weight: 900; text-transform: uppercase;
+    line-height: 1.05; letter-spacing: -1px; margin-bottom: 16px;
+  }
+
+  .sec-title .hl { background: var(--yellow); padding: 1px 10px; border: 2px solid var(--black); display: inline-block; }
+  .sec-title .hg { background: var(--green); padding: 1px 10px; border: 2px solid var(--black); display: inline-block; }
+
+  .divider { height: 3px; background: var(--black); margin: 18px 0; }
+
+  /* ── COVER ────────────────────────────────────────── */
+  .cover {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 52px; background: var(--black); color: var(--white);
+  }
+  .cover-tag {
+    display: inline-block; background: var(--green); color: var(--black);
+    font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 2px; padding: 6px 14px;
+    border: 3px solid var(--black); width: fit-content; margin-bottom: 36px;
+  }
+  .cover h1 {
+    font-size: 78px; font-weight: 900; line-height: 0.92;
+    text-transform: uppercase; letter-spacing: -3px; margin-bottom: 16px;
+  }
+  .cover h1 .hl {
+    display: inline-block; background: var(--yellow); color: var(--black);
+    padding: 2px 18px; border: 3px solid var(--black);
+  }
+  .cover-sub {
+    font-family: var(--font-mono); font-size: 14px; color: #888;
+    margin-bottom: 40px; max-width: 460px; line-height: 1.7;
+  }
+  .cover-stats { display: flex; gap: 40px; margin-top: auto; }
+  .cover-stat-label {
+    font-family: var(--font-mono); font-size: 9px; text-transform: uppercase;
+    letter-spacing: 2px; color: #555; margin-bottom: 4px;
+  }
+  .cover-stat-val {
+    font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--green);
+  }
+  .cover-bottom {
+    margin-top: 40px; padding-top: 20px; border-top: 1px solid #333;
+    display: flex; justify-content: space-between;
+  }
+  .cover-bottom span {
+    font-family: var(--font-mono); font-size: 10px; color: #555;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+
+  /* ── PAGE 2 (Problem + Solution) ──────────────────── */
+  .p2 { padding: 32px 44px; display: flex; flex-direction: column; }
+  .p2-problem-intro {
+    font-family: var(--font-mono); font-size: 11px; line-height: 1.7;
+    color: #444; max-width: 600px; margin-bottom: 16px;
+  }
+  .p2-problem-intro strong { color: var(--black); }
+  .p2-stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
+  .p2-stat-card {
+    background: var(--white); border: var(--border); padding: 14px 12px;
+    box-shadow: 3px 3px 0 var(--black); text-align: center;
+  }
+  .p2-stat-card .num { font-size: 28px; font-weight: 900; line-height: 1; margin-bottom: 4px; color: var(--black); }
+  .p2-stat-card .num.red { color: #ef4444; }
+  .p2-stat-card .num.yellow { color: #ca8a04; }
+  .p2-stat-card .label { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 1px; color: #666; line-height: 1.3; }
+  .p2-problems { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .p2-problem-card {
+    background: var(--white); border: 2px solid var(--black);
+    padding: 12px 14px; box-shadow: 3px 3px 0 var(--black);
+  }
+  .p2-problem-card h3 { font-size: 11px; font-weight: 900; text-transform: uppercase; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+  .p2-problem-card h3 .icon {
+    width: 18px; height: 18px; background: var(--black); color: var(--yellow);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 900; flex-shrink: 0;
+  }
+  .p2-problem-card p { font-family: var(--font-mono); font-size: 8.5px; line-height: 1.5; color: #555; }
+  .p2-divider { height: 3px; background: var(--black); margin: 12px 0; display: flex; align-items: center; gap: 10px; }
+  .p2-divider-label {
+    background: var(--black); color: var(--white); font-family: var(--font-mono);
+    font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+    padding: 4px 12px; white-space: nowrap;
+  }
+  .p2-solution-section { flex: 1; display: flex; flex-direction: column; }
+  .p2-solution-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .p2-solution-card { border: var(--border); padding: 12px 14px; box-shadow: 3px 3px 0 var(--black); }
+  .p2-solution-card.writer { background: var(--yellow); }
+  .p2-solution-card.reviewer { background: var(--green); }
+  .p2-solution-card.human { background: var(--black); color: var(--white); }
+  .p2-solution-card.send { background: var(--white); }
+  .p2-solution-card .tag { font-family: var(--font-mono); font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; opacity: 0.5; margin-bottom: 3px; }
+  .p2-solution-card h3 { font-size: 14px; font-weight: 900; text-transform: uppercase; margin-bottom: 3px; }
+  .p2-solution-card p { font-family: var(--font-mono); font-size: 8.5px; line-height: 1.5; opacity: 0.8; }
+  .p2-comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: auto; }
+  .p2-comparison-box { border: var(--border); overflow: hidden; box-shadow: 3px 3px 0 var(--black); }
+  .p2-comparison-header { padding: 6px 12px; font-family: var(--font-mono); font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+  .p2-comparison-header.bad { background: #ef4444; color: white; }
+  .p2-comparison-header.good { background: var(--green); color: var(--black); }
+  .p2-comparison-list { background: var(--white); padding: 8px 12px; }
+  .p2-comparison-list li { font-family: var(--font-mono); font-size: 8.5px; line-height: 1.5; color: #444; list-style: none; padding: 2px 0; }
+  .p2-comparison-list li::before { margin-right: 6px; font-weight: 900; }
+  .p2-comparison-box.bad li::before { content: "\2717"; color: #ef4444; }
+  .p2-comparison-box.good li::before { content: "\2713"; color: var(--green); }
+
+  /* ── PAGE 3 (Mockups) ──────────────────────────────── */
+  .p3 { padding: 24px 40px; display: flex; flex-direction: column; }
+  .p3 .mock-row { display: flex; gap: 10px; margin-top: 10px; height: 320px; align-items: stretch; }
+  .p3 .mock-frame { flex: 1; border: 2px solid var(--black); background: var(--white); box-shadow: 3px 3px 0 var(--black); overflow: hidden; display: flex; flex-direction: column; }
+  .p3 .mock-bar { background: var(--black); padding: 3px 8px; display: flex; align-items: center; gap: 4px; }
+  .p3 .mock-dot { width: 5px; height: 5px; border-radius: 50%; }
+  .p3 .mock-dot.r { background: #ef4444; }
+  .p3 .mock-dot.y { background: #eab308; }
+  .p3 .mock-dot.g { background: #22c55e; }
+  .p3 .mock-bar-text { font-family: var(--font-mono); font-size: 7px; color: #888; margin-left: 5px; text-transform: uppercase; letter-spacing: 1px; }
+  .p3 .mock-body { flex: 1; padding: 6px; overflow: hidden; }
+  .p3 .mock-caption { padding: 3px 6px; font-family: var(--font-mono); font-size: 6.5px; text-transform: uppercase; letter-spacing: 1px; color: #666; background: #f9f9f6; border-top: 2px solid var(--black); }
+
+  /* Login mock */
+  .mock-login { background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
+  .mock-login-card { width: 88%; background: var(--white); border: 2px solid var(--black); box-shadow: 2px 2px 0 var(--black); }
+  .mock-login-header { background: var(--green); padding: 5px 8px; border-bottom: 2px solid var(--black); }
+  .mock-login-icon { width: 18px; height: 18px; background: var(--yellow); border: 2px solid var(--black); display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 900; margin-bottom: 2px; }
+  .mock-login-title { font-size: 12px; font-weight: 900; text-transform: uppercase; line-height: 1; }
+  .mock-login-sub { font-family: var(--font-mono); font-size: 5.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 1px; }
+  .mock-login-body { padding: 6px 8px; }
+  .mock-login-desc { font-family: var(--font-mono); font-size: 6.5px; line-height: 1.4; color: #444; margin-bottom: 5px; }
+  .mock-google-btn { width: 100%; background: var(--bg); border: 2px solid var(--black); padding: 4px; font-family: var(--font-mono); font-size: 7px; font-weight: 700; text-transform: uppercase; text-align: center; box-shadow: 2px 2px 0 var(--black); }
+  .mock-google-g { display: inline-block; width: 10px; height: 10px; background: #4285f4; color: white; font-size: 7px; font-weight: 900; text-align: center; line-height: 10px; margin-right: 2px; vertical-align: middle; }
+  .mock-login-foot { font-family: var(--font-mono); font-size: 5.5px; text-transform: uppercase; letter-spacing: 0.5px; color: #999; padding: 4px 8px; border-top: 1px solid #ddd; }
+
+  /* Composer mock */
+  .mock-composer { background: var(--bg); height: 100%; padding: 5px 6px; display: flex; flex-direction: column; gap: 3px; }
+  .mock-composer-title { font-size: 11px; font-weight: 900; text-transform: uppercase; line-height: 1; }
+  .mock-composer-title .hl { background: var(--yellow); padding: 0 3px; border: 1px solid var(--black); font-size: 11px; }
+  .mock-composer-sub { font-family: var(--font-mono); font-size: 5.5px; color: #555; }
+  .mock-field-label { font-family: var(--font-mono); font-size: 5.5px; text-transform: uppercase; letter-spacing: 1px; color: #999; margin-bottom: 1px; }
+  .mock-input-sm { width: 100%; border: 2px solid var(--black); padding: 2px 5px; font-family: var(--font-mono); font-size: 6.5px; background: var(--white); }
+  .mock-textarea-sm { width: 100%; border: 2px solid var(--black); padding: 2px 5px; font-family: var(--font-mono); font-size: 6.5px; background: var(--white); min-height: 16px; resize: none; }
+  .mock-gen-btn { background: var(--green); border: 2px solid var(--black); padding: 2px 6px; font-family: var(--font-mono); font-size: 6.5px; font-weight: 700; text-transform: uppercase; box-shadow: 2px 2px 0 var(--black); width: fit-content; }
+  .mock-preview { border: 2px solid var(--black); background: var(--white); padding: 4px 5px; flex: 1; }
+  .mock-preview-subject { font-family: var(--font-mono); font-size: 7px; font-weight: 700; margin-bottom: 2px; }
+  .mock-preview-body { font-family: var(--font-mono); font-size: 5.5px; line-height: 1.3; color: #333; }
+  .mock-send-btn { background: var(--yellow); border: 2px solid var(--black); padding: 2px 6px; font-family: var(--font-mono); font-size: 6.5px; font-weight: 700; text-transform: uppercase; box-shadow: 2px 2px 0 var(--black); width: fit-content; }
+  .mock-tone-badge { display: inline-block; background: var(--yellow); border: 1px solid var(--black); font-family: var(--font-mono); font-size: 5.5px; font-weight: 700; padding: 1px 3px; text-transform: uppercase; margin-top: 2px; }
+
+  /* Settings mock */
+  .mock-settings { background: var(--bg); height: 100%; padding: 5px 6px; display: flex; flex-direction: column; gap: 3px; }
+  .mock-settings-title { font-size: 11px; font-weight: 900; text-transform: uppercase; line-height: 1; }
+  .mock-settings-sub { font-family: var(--font-mono); font-size: 5.5px; color: #555; margin-bottom: 2px; }
+  .mock-profile-card { border: 2px solid var(--black); background: var(--white); box-shadow: 2px 2px 0 var(--black); flex: 1; }
+  .mock-profile-header { background: var(--green); padding: 3px 6px; border-bottom: 2px solid var(--black); display: flex; justify-content: space-between; align-items: center; }
+  .mock-profile-header span { font-size: 7px; font-weight: 900; text-transform: uppercase; }
+  .mock-edit-btn { background: var(--yellow); border: 1px solid var(--black); padding: 1px 5px; font-family: var(--font-mono); font-size: 5.5px; font-weight: 700; text-transform: uppercase; }
+  .mock-profile-row { display: flex; gap: 5px; padding: 3px 6px; border-bottom: 1px solid #eee; }
+  .mock-profile-row:last-child { border-bottom: none; }
+  .mock-profile-key { font-family: var(--font-mono); font-size: 5.5px; font-weight: 700; text-transform: uppercase; color: #999; width: 36px; min-width: 36px; }
+  .mock-profile-val { font-family: var(--font-mono); font-size: 6.5px; color: #333; }
+
+  /* ── CONTENT PAGES ──────────────────────────────── */
+  .content { padding: 36px 48px; display: flex; flex-direction: column; }
+
+  /* Architecture */
+  .arch-split { display: flex; gap: 16px; }
+  .arch-left { flex: 1; }
+  .arch-flow { display: flex; flex-direction: column; }
+  .arch-box { border: var(--border); padding: 10px 14px; box-shadow: 3px 3px 0 var(--black); }
+  .arch-box.green { background: var(--green); }
+  .arch-box.yellow { background: var(--yellow); }
+  .arch-box.dark { background: var(--black); color: var(--white); }
+  .arch-box.grey { background: #e5e5e0; }
+  .arch-box-sm { font-family: var(--font-mono); font-size: 7px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.5; margin-bottom: 1px; }
+  .arch-box-title { font-size: 13px; font-weight: 900; text-transform: uppercase; }
+  .arch-box-desc { font-family: var(--font-mono); font-size: 9px; line-height: 1.4; opacity: 0.7; }
+  .arch-arrow-center { display: flex; justify-content: center; padding: 2px 0; font-size: 14px; color: var(--black); }
+  .arch-row-3 { display: flex; gap: 8px; }
+  .arch-row-3 .arch-box { flex: 1; text-align: center; padding: 8px 6px; }
+  .arch-row-3 .arch-box-title { font-size: 10px; }
+  .arch-row-2 { display: flex; gap: 10px; }
+  .arch-row-2 .arch-box { flex: 1; text-align: center; }
+
+  /* Sample Flow */
+  .sample-flow { margin-top: 12px; }
+  .sample-label { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 2px; color: #999; margin-bottom: 6px; }
+  .sample-block { border: var(--border); background: var(--white); box-shadow: 3px 3px 0 var(--black); overflow: hidden; margin-bottom: 8px; }
+  .sample-block-header { background: var(--black); color: var(--white); padding: 5px 12px; font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; }
+  .sample-block-body { padding: 10px 14px; }
+  .sample-block-body .mock-input { background: #f0f0ec; border: 2px dashed #ccc; padding: 6px 10px; font-family: var(--font-mono); font-size: 9px; color: #555; }
+  .sample-block-body .mock-draft { margin-top: 6px; }
+  .sample-block-body .draft-field { margin-bottom: 5px; }
+  .draft-field-label { font-family: var(--font-mono); font-size: 7px; text-transform: uppercase; letter-spacing: 2px; color: #999; margin-bottom: 1px; }
+  .draft-field-value { font-family: var(--font-mono); font-size: 9px; line-height: 1.4; color: #222; }
+  .draft-field-value.subject { font-weight: 700; font-size: 11px; }
+  .sample-arrow { display: flex; justify-content: center; padding: 2px 0; font-family: var(--font-mono); font-size: 9px; font-weight: 700; color: var(--black); }
+  .tone-badge { display: inline-block; background: var(--yellow); font-family: var(--font-mono); font-size: 8px; font-weight: 700; padding: 1px 6px; border: 1px solid var(--black); text-transform: uppercase; }
+  .used-context { background: #f0f0ec; padding: 6px 10px; margin-top: 6px; font-family: var(--font-mono); font-size: 8px; color: #777; border-left: 3px solid var(--green); }
+
+  /* Agent Sidebar */
+  .agent-sidebar { width: 200px; display: flex; flex-direction: column; gap: 12px; }
+  .agent-loop { background: var(--white); border: var(--border); padding: 12px; box-shadow: 3px 3px 0 var(--black); display: flex; flex-direction: column; gap: 6px; }
+  .agent-node { padding: 8px 10px; border: var(--border); text-align: center; box-shadow: 2px 2px 0 var(--black); }
+  .agent-node.user { background: var(--black); color: var(--white); }
+  .agent-node.writer { background: var(--yellow); }
+  .agent-node.reviewer { background: var(--green); }
+  .agent-node-sm { font-family: var(--font-mono); font-size: 6px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.5; }
+  .agent-node-name { font-size: 12px; font-weight: 900; text-transform: uppercase; }
+  .agent-arrow-center { text-align: center; font-size: 13px; font-weight: 900; }
+  .agent-loop-note { font-family: var(--font-mono); font-size: 7px; text-align: center; color: #999; text-transform: uppercase; letter-spacing: 1px; }
+  .tool-stack { background: var(--white); border: var(--border); padding: 10px; box-shadow: 2px 2px 0 var(--black); }
+  .tool-list { display: flex; flex-direction: column; gap: 4px; }
+  .tool-item { display: flex; align-items: center; gap: 6px; padding: 4px 6px; background: #f9f9f6; border: 1px solid #e5e5e0; }
+  .tool-item-dot { width: 5px; height: 5px; min-width: 5px; background: var(--green); }
+  .tool-item-name { font-family: var(--font-mono); font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .tool-item-desc { font-family: var(--font-mono); font-size: 7px; color: #888; }
+
+  /* Metrics */
+  .metrics-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .metric-card { background: var(--white); border: var(--border); padding: 12px 10px; text-align: center; box-shadow: 3px 3px 0 var(--black); }
+  .metric-card.feat { background: var(--yellow); }
+  .metric-val { font-size: 26px; font-weight: 900; line-height: 1; margin-bottom: 3px; }
+  .metric-label { font-family: var(--font-mono); font-size: 7px; text-transform: uppercase; letter-spacing: 1px; color: #666; }
+
+  /* ── FEATURES ──────────────────────────────────── */
+  .feat-grid { display: flex; flex-direction: column; gap: 10px; }
+  .feat-item { display: flex; gap: 12px; background: var(--white); border: 2px solid var(--black); padding: 12px 14px; box-shadow: 3px 3px 0 var(--black); }
+  .feat-num { width: 32px; height: 32px; min-width: 32px; background: var(--black); color: var(--green); font-family: var(--font-mono); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .feat-content h3 { font-size: 12px; font-weight: 900; text-transform: uppercase; margin-bottom: 3px; }
+  .feat-content p { font-family: var(--font-mono); font-size: 9px; line-height: 1.4; color: #444; }
+  .feat-tags { display: flex; gap: 5px; margin-top: 4px; flex-wrap: wrap; }
+  .feat-tag { display: inline-block; background: var(--yellow); font-family: var(--font-mono); font-size: 7px; font-weight: 700; padding: 1px 6px; border: 1px solid var(--black); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ── RAG PAGE ─────────────────────────────────────── */
+  .rag-page { padding: 32px 44px; display: flex; flex-direction: column; }
+  .rag-intro { font-family: var(--font-mono); font-size: 10px; line-height: 1.7; color: #444; max-width: 580px; margin-bottom: 14px; }
+  .rag-intro strong { color: var(--black); }
+
+  .rag-pipeline {
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 14px; padding: 14px;
+    background: var(--white); border: var(--border); box-shadow: 3px 3px 0 var(--black);
+  }
+  .rag-pipe-step { flex: 1; text-align: center; padding: 10px 6px; border: 2px solid var(--black); }
+  .rag-pipe-step.sending { background: var(--black); color: var(--white); }
+  .rag-pipe-step.embedding { background: #a855f7; color: white; }
+  .rag-pipe-step.storing { background: #3b82f6; color: white; }
+  .rag-pipe-step.searching { background: var(--yellow); }
+  .rag-pipe-step.writing { background: var(--green); }
+  .rag-pipe-step .pipe-label { font-family: var(--font-mono); font-size: 6px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.6; margin-bottom: 2px; }
+  .rag-pipe-step .pipe-name { font-size: 10px; font-weight: 900; text-transform: uppercase; line-height: 1.1; }
+  .rag-pipe-step .pipe-desc { font-family: var(--font-mono); font-size: 6.5px; line-height: 1.3; margin-top: 2px; opacity: 0.8; }
+  .rag-pipe-arrow { font-size: 16px; font-weight: 900; color: var(--black); flex-shrink: 0; }
+
+  .rag-tools-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .rag-tool-card { border: var(--border); padding: 14px 12px; box-shadow: 3px 3px 0 var(--black); background: var(--white); }
+  .rag-tool-card .tool-num { width: 24px; height: 24px; background: var(--black); color: var(--green); font-family: var(--font-mono); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-bottom: 6px; }
+  .rag-tool-card h3 { font-size: 11px; font-weight: 900; text-transform: uppercase; margin-bottom: 4px; }
+  .rag-tool-card p { font-family: var(--font-mono); font-size: 8px; line-height: 1.5; color: #555; margin-bottom: 6px; }
+  .rag-tool-card .code-snippet { background: #1a1a1a; color: #00d95f; padding: 6px 8px; font-family: var(--font-mono); font-size: 7px; line-height: 1.4; border-left: 3px solid var(--green); overflow: hidden; }
+  .rag-tool-card .code-snippet .kw { color: #a855f7; }
+  .rag-tool-card .code-snippet .fn { color: #f8e800; }
+  .rag-tool-card .code-snippet .str { color: #22c55e; }
+
+  .rag-stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
+  .rag-stat { background: var(--white); border: var(--border); padding: 10px; text-align: center; box-shadow: 3px 3px 0 var(--black); }
+  .rag-stat .val { font-size: 22px; font-weight: 900; line-height: 1; margin-bottom: 2px; }
+  .rag-stat .val.purple { color: #a855f7; }
+  .rag-stat .val.blue { color: #3b82f6; }
+  .rag-stat .val.green { color: var(--green); }
+  .rag-stat .val.yellow { color: #ca8a04; }
+  .rag-stat .lbl { font-family: var(--font-mono); font-size: 7px; text-transform: uppercase; letter-spacing: 1px; color: #666; }
+
+  .rag-flow-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: auto; }
+  .rag-flow-box { border: var(--border); overflow: hidden; box-shadow: 3px 3px 0 var(--black); }
+  .rag-flow-box-header { padding: 6px 12px; font-family: var(--font-mono); font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+  .rag-flow-box-header.write { background: var(--green); color: var(--black); }
+  .rag-flow-box-header.read { background: var(--yellow); color: var(--black); }
+  .rag-flow-box-body { background: var(--white); padding: 8px 12px; font-family: var(--font-mono); font-size: 8px; line-height: 1.6; color: #444; }
+  .rag-flow-box-body .step { display: flex; gap: 6px; align-items: flex-start; padding: 2px 0; }
+  .rag-flow-box-body .step-num { width: 16px; height: 16px; min-width: 16px; background: var(--black); color: var(--green); font-size: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .rag-flow-box-body .step-text { flex: 1; }
+
+  /* ── TECH STACK ─────────────────────────────────────── */
+  .tech-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
+  .tech-card { background: var(--white); border: 2px solid var(--black); padding: 18px 12px; box-shadow: 3px 3px 0 var(--black); text-align: center; }
+  .tech-card-icon { width: 40px; height: 40px; margin: 0 auto 10px; background: var(--yellow); border: 2px solid var(--black); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .tech-card-icon.blue { background: #3b82f6; color: white; }
+  .tech-card-icon.purple { background: #a855f7; color: white; }
+  .tech-card-icon.orange { background: #f97316; color: white; }
+  .tech-card-icon.green { background: var(--green); }
+  .tech-card-icon.dark { background: var(--black); color: white; }
+  .tech-card-name { font-size: 12px; font-weight: 900; text-transform: uppercase; margin-bottom: 4px; }
+  .tech-card-role { font-family: var(--font-mono); font-size: 9px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* Learnings */
+  .learn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+  .learn-card { background: var(--white); border: 2px solid var(--black); padding: 16px; box-shadow: 3px 3px 0 var(--black); }
+  .learn-card h4 { font-size: 12px; font-weight: 900; text-transform: uppercase; margin-bottom: 6px; }
+  .learn-card p { font-family: var(--font-mono); font-size: 10px; line-height: 1.6; color: #444; }
+
+  /* ── CLOSING ─────────────────────────────────────── */
+  .closing {
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 60px 52px; background: var(--black); color: var(--white);
+  }
+  .closing h2 { font-size: 52px; font-weight: 900; text-transform: uppercase; line-height: 1; letter-spacing: -2px; margin-bottom: 16px; }
+  .closing h2 .hl { background: var(--yellow); color: var(--black); padding: 2px 16px; border: 3px solid var(--black); display: inline-block; }
+  .closing p { font-family: var(--font-mono); font-size: 12px; color: #777; max-width: 440px; line-height: 1.7; margin-bottom: 36px; }
+  .closing-stack { background: var(--green); color: var(--black); padding: 20px 28px; border: 3px solid var(--black); box-shadow: 4px 4px 0 var(--yellow); text-align: left; max-width: 380px; margin-bottom: 36px; }
+  .closing-stack-label { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
+  .closing-stack-list { font-family: var(--font-mono); font-size: 11px; line-height: 1.8; }
+  .closing-links { display: flex; gap: 16px; margin-top: auto; }
+  .closing-link { background: var(--white); color: var(--black); font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 12px 22px; border: 3px solid var(--black); box-shadow: 4px 4px 0 var(--green); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 — COVER -->
+<div class="page cover">
+  <div class="cover-tag">AI Project Showcase</div>
+  <h1>Mail<span class="hl">-AI</span></h1>
+  <p class="cover-sub">
+    An AI-powered email assistant that drafts, reviews, and sends
+    professional emails — with a human always in control.
+  </p>
+  <div class="cover-stats">
+    <div>
+      <div class="cover-stat-label">Stack</div>
+      <div class="cover-stat-val">Next.js 16 · Gemini · Supabase</div>
+    </div>
+    <div>
+      <div class="cover-stat-label">AI Agents</div>
+      <div class="cover-stat-val">Writer + Reviewer + 5 Tools</div>
+    </div>
+    <div>
+      <div class="cover-stat-label">Status</div>
+      <div class="cover-stat-val">Live &amp; Deployed</div>
+    </div>
+  </div>
+  <div class="cover-bottom">
+    <span>Built with obsessive attention to detail</span>
+    <span>2026</span>
+  </div>
+</div>
+
+<!-- PAGE 2 — PROBLEM + SOLUTION -->
+<div class="page p2">
+  <div class="sec-label">01 — Why This Exists</div>
+  <div class="sec-title">
+    Email is broken.<br/>Here's the <span class="hl">fix.</span>
+  </div>
+  <p class="p2-problem-intro">
+    Professionals spend <strong>11+ hours a week</strong> on email. Most of that time is wasted
+    on drafting, revising, and formatting — work that AI should be handling. Existing tools
+    either auto-send without approval or generate generic templates that don't sound like you.
+  </p>
+  <div class="p2-stats-row">
+    <div class="p2-stat-card">
+      <div class="num red">28%</div>
+      <div class="label">Of workday lost<br/>to email</div>
+    </div>
+    <div class="p2-stat-card">
+      <div class="num yellow">11h</div>
+      <div class="label">Per week spent<br/>on email</div>
+    </div>
+    <div class="p2-stat-card">
+      <div class="num red">74%</div>
+      <div class="label">Workers feel email<br/>kills productivity</div>
+    </div>
+    <div class="p2-stat-card">
+      <div class="num yellow">$0</div>
+      <div class="label">Existing tools<br/>know about you</div>
+    </div>
+  </div>
+  <div class="p2-problems">
+    <div class="p2-problem-card">
+      <h3><span class="icon">01</span> No Context Awareness</h3>
+      <p>AI tools generate from scratch — they never look at your past emails or learn how you actually write. Every draft sounds generic.</p>
+    </div>
+    <div class="p2-problem-card">
+      <h3><span class="icon">02</span> Zero Human Control</h3>
+      <p>Most tools auto-send without approval. No editing, no preview, no way to catch mistakes before they reach the recipient.</p>
+    </div>
+    <div class="p2-problem-card">
+      <h3><span class="icon">03</span> No Recipient Intelligence</h3>
+      <p>Knowing who you're writing to matters. No existing tool researches the recipient's company, role, or your history with them.</p>
+    </div>
+    <div class="p2-problem-card">
+      <h3><span class="icon">04</span> Tone Mismatch</h3>
+      <p>You write differently to your boss vs. a friend. Generic AI outputs miss the nuance of established relationships.</p>
+    </div>
+  </div>
+  <div class="p2-divider">
+    <div class="p2-divider-label">How Mail-AI Solves This</div>
+  </div>
+  <div class="p2-solution-section">
+    <div class="p2-solution-row">
+      <div class="p2-solution-card writer">
+        <div class="tag">AI Agent</div>
+        <h3>Writer Agent</h3>
+        <p>Drafts emails using real context: your Gmail history, recipient tone, company info, and past templates. 5 tools at its disposal.</p>
+      </div>
+      <div class="p2-solution-card reviewer">
+        <div class="tag">AI Agent</div>
+        <h3>Reviewer Agent</h3>
+        <p>Checks quality, tone, and accuracy. If it fails review, the Writer rewrites with specific feedback. Max 1 revision cycle.</p>
+      </div>
+      <div class="p2-solution-card human">
+        <div class="tag">Human</div>
+        <h3>You Stay in Control</h3>
+        <p>Preview, edit subject/body/tone inline, attach files. Nothing sends without your explicit approval. Always.</p>
+      </div>
+      <div class="p2-solution-card send">
+        <div class="tag">Action</div>
+        <h3>Send from YOUR Gmail</h3>
+        <p>OAuth2 sends through your own account — not a third-party. Recipients see a normal email from you.</p>
+      </div>
+    </div>
+    <div class="p2-comparison">
+      <div class="p2-comparison-box bad">
+        <div class="p2-comparison-header">Traditional AI Email Tools</div>
+        <ul class="p2-comparison-list">
+          <li>Generic templates, no personalization</li>
+          <li>No access to your past emails</li>
+          <li>Auto-send without approval</li>
+          <li>No understanding of recipient context</li>
+          <li>Sends from third-party address</li>
+        </ul>
+      </div>
+      <div class="p2-comparison-box good">
+        <div class="p2-comparison-header">Mail-AI</div>
+        <ul class="p2-comparison-list">
+          <li>Matches YOUR writing style per recipient</li>
+          <li>Reads real Gmail threads for context</li>
+          <li>Human approves before every send</li>
+          <li>Researches recipient's company &amp; role</li>
+          <li>Sends from your own Gmail account</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <span class="page-num">02</span>
+</div>
+
+<!-- PAGE 3 — UI MOCKUPS -->
+<div class="page p3">
+  <div class="sec-label">02 — The Interface</div>
+  <div class="sec-title">
+    Three screens.<br/><span class="hg">One workflow.</span>
+  </div>
+  <div class="mock-row">
+    <div class="mock-frame">
+      <div class="mock-bar">
+        <div class="mock-dot r"></div><div class="mock-dot y"></div><div class="mock-dot g"></div>
+        <span class="mock-bar-text">Login</span>
+      </div>
+      <div class="mock-body">
+        <div class="mock-login">
+          <div class="mock-login-card">
+            <div class="mock-login-header">
+              <div class="mock-login-icon">@</div>
+              <div class="mock-login-title">Mail-AI</div>
+              <div class="mock-login-sub">You brief. Agents write. You send.</div>
+            </div>
+            <div class="mock-login-body">
+              <div class="mock-login-desc">Sign in to draft emails with AI and send them from your own Gmail.</div>
+              <div class="mock-google-btn"><span class="mock-google-g">G</span> Sign in with Google</div>
+            </div>
+            <div class="mock-login-foot">Read-only Gmail access — used to match your writing style</div>
+          </div>
+        </div>
+      </div>
+      <div class="mock-caption">Google OAuth — one-click sign in</div>
+    </div>
+    <div class="mock-frame">
+      <div class="mock-bar">
+        <div class="mock-dot r"></div><div class="mock-dot y"></div><div class="mock-dot g"></div>
+        <span class="mock-bar-text">Composer</span>
+      </div>
+      <div class="mock-body">
+        <div class="mock-composer">
+          <div class="mock-composer-title">Write an <span class="hl">email</span></div>
+          <div class="mock-composer-sub">Two agents draft + review. You approve. It sends from your Gmail.</div>
+          <div><div class="mock-field-label">Recipient</div><div class="mock-input-sm">sarah@acme.com</div></div>
+          <div><div class="mock-field-label">Brief</div><div class="mock-textarea-sm">Reply about Friday's demo...</div></div>
+          <div class="mock-gen-btn">Generate Email</div>
+          <div class="mock-preview">
+            <div class="mock-preview-subject">Re: Friday Demo — Moving to 3pm</div>
+            <div class="mock-preview-body">Hi Sarah,<br/><br/>Quick update on Friday — would it work to push the demo to 3pm instead? I want to make sure we have enough time to prep.<br/><br/>Best,<br/>Alex Rivera</div>
+            <div class="mock-tone-badge">friendly</div>
+          </div>
+          <div class="mock-send-btn">Approve &amp; Send</div>
+        </div>
+      </div>
+      <div class="mock-caption">Brief → Generate → Review → Approve &amp; Send</div>
+    </div>
+    <div class="mock-frame">
+      <div class="mock-bar">
+        <div class="mock-dot r"></div><div class="mock-dot y"></div><div class="mock-dot g"></div>
+        <span class="mock-bar-text">Settings</span>
+      </div>
+      <div class="mock-body">
+        <div class="mock-settings">
+          <div class="mock-settings-title">Persona</div>
+          <div class="mock-settings-sub">Who you are — used to sign and personalize your emails.</div>
+          <div class="mock-profile-card">
+            <div class="mock-profile-header"><span>Your details</span><div class="mock-edit-btn">Edit</div></div>
+            <div class="mock-profile-row"><div class="mock-profile-key">Name</div><div class="mock-profile-val">Alex Rivera</div></div>
+            <div class="mock-profile-row"><div class="mock-profile-key">Title</div><div class="mock-profile-val">Software Engineering Student</div></div>
+            <div class="mock-profile-row"><div class="mock-profile-key">Company</div><div class="mock-profile-val">University of Karachi</div></div>
+            <div class="mock-profile-row"><div class="mock-profile-key">Phone</div><div class="mock-profile-val">(555) 010-4432</div></div>
+            <div class="mock-profile-row"><div class="mock-profile-key">About</div><div class="mock-profile-val">Looking for internships, built a SaaS with Next.js</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="mock-caption">Persona — who you are, how you sign</div>
+    </div>
+  </div>
+  <span class="page-num">03</span>
+</div>
+
+<!-- PAGE 4 — ARCHITECTURE + SAMPLE FLOW -->
+<div class="page content">
+  <div class="sec-label">03 — How It Works</div>
+  <div class="sec-title">Multi-agent <span class="hg">orchestration.</span></div>
+  <div class="arch-split">
+    <div class="arch-left">
+      <div class="arch-flow">
+        <div class="arch-box dark">
+          <div class="arch-box-sm">Input</div>
+          <div class="arch-box-title">User Brief</div>
+          <div class="arch-box-desc">"Reply to Sara about Friday's demo, keep it friendly"</div>
+        </div>
+        <div class="arch-arrow-center">&darr;</div>
+        <div class="arch-row-3">
+          <div class="arch-box yellow"><div class="arch-box-sm">Tool</div><div class="arch-box-title">Gmail History</div></div>
+          <div class="arch-box yellow"><div class="arch-box-sm">Tool</div><div class="arch-box-title">Recipient Tone</div></div>
+          <div class="arch-box yellow"><div class="arch-box-sm">Tool</div><div class="arch-box-title">Company Lookup</div></div>
+        </div>
+        <div class="arch-arrow-center">&darr;</div>
+        <div class="arch-box green">
+          <div class="arch-box-sm">AI Agent</div>
+          <div class="arch-box-title">Writer Agent</div>
+          <div class="arch-box-desc">Generates structured email: subject, body, tone</div>
+        </div>
+        <div class="arch-arrow-center">&darr;</div>
+        <div class="arch-box grey">
+          <div class="arch-box-sm">AI Agent</div>
+          <div class="arch-box-title">Reviewer Agent</div>
+          <div class="arch-box-desc">Checks quality — approve or rewrite (max 1 cycle)</div>
+        </div>
+        <div class="arch-arrow-center">&darr;</div>
+        <div class="arch-row-2">
+          <div class="arch-box dark"><div class="arch-box-sm">Human</div><div class="arch-box-title">Review &amp; Edit</div></div>
+          <div class="arch-box green"><div class="arch-box-sm">Action</div><div class="arch-box-title">Send via Gmail</div></div>
+        </div>
+      </div>
+      <div class="sample-flow">
+        <div class="sample-label">Sample Email Generation</div>
+        <div class="sample-block">
+          <div class="sample-block-header"><span>User Input</span><span>Brief</span></div>
+          <div class="sample-block-body">
+            <div class="mock-input">"Reply to sarah@acme.com about moving Friday's demo to 3pm. Keep it friendly and professional."</div>
+          </div>
+        </div>
+        <div class="sample-arrow">&darr; Writer Agent runs 3 tools, generates draft</div>
+        <div class="sample-block">
+          <div class="sample-block-header"><span>AI Output</span><span>Draft</span></div>
+          <div class="sample-block-body">
+            <div class="mock-draft">
+              <div class="draft-field"><div class="draft-field-label">Subject</div><div class="draft-field-value subject">Re: Friday Demo — Moving to 3pm</div></div>
+              <div class="draft-field"><div class="draft-field-label">Body</div><div class="draft-field-value">
+                Hi Sarah,<br/><br/>
+                Quick update on Friday — would it work to push the demo to 3pm instead? I want to make sure we have enough time to prep everything on our end.<br/><br/>
+                Let me know if that works for your schedule. Happy to adjust if needed.<br/><br/>
+                Best,<br/>Alex Rivera<br/>Software Engineering Student · University of Karachi
+              </div></div>
+              <div class="draft-field"><div class="draft-field-label">Tone</div><span class="tone-badge">friendly</span></div>
+              <div class="used-context">
+                <strong>Context used:</strong> Recipient tone matched previous emails to sarah@acme.com (friendly). Acme Corp detected as business — company info retrieved via web search.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="agent-sidebar">
+      <div>
+        <div class="sample-label">Agent Loop</div>
+        <div class="agent-loop">
+          <div class="agent-node user"><div class="agent-node-sm">Input</div><div class="agent-node-name">User Brief</div></div>
+          <div class="agent-arrow-center">&darr;</div>
+          <div class="agent-node writer"><div class="agent-node-sm">AI Agent</div><div class="agent-node-name">Writer</div></div>
+          <div class="agent-arrow-center">&darr;</div>
+          <div class="agent-node reviewer"><div class="agent-node-sm">AI Agent</div><div class="agent-node-name">Reviewer</div></div>
+          <div class="agent-loop-note">&reassin; rewrite if not approved</div>
+          <div class="agent-arrow-center">&darr;</div>
+          <div class="agent-node user"><div class="agent-node-sm">Output</div><div class="agent-node-name">Final Draft</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="sample-label">Writer's 5 Tools</div>
+        <div class="tool-stack">
+          <div class="tool-list">
+            <div class="tool-item"><div class="tool-item-dot"></div><div><div class="tool-item-name">Gmail History</div><div class="tool-item-desc">Read real messages from the recipient</div></div></div>
+            <div class="tool-item"><div class="tool-item-dot"></div><div><div class="tool-item-name">Recipient Tone</div><div class="tool-item-desc">Match your established writing style</div></div></div>
+            <div class="tool-item"><div class="tool-item-dot"></div><div><div class="tool-item-name">Semantic Search</div><div class="tool-item-desc">pgvector search over past emails</div></div></div>
+            <div class="tool-item"><div class="tool-item-dot"></div><div><div class="tool-item-name">Find Template</div><div class="tool-item-desc">Reuse a previous email's structure</div></div></div>
+            <div class="tool-item"><div class="tool-item-dot"></div><div><div class="tool-item-name">Company Lookup</div><div class="tool-item-desc">Web search on recipient's domain</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sample-label">By the Numbers</div>
+        <div class="metrics-row">
+          <div class="metric-card feat"><div class="metric-val">2</div><div class="metric-label">AI Agents</div></div>
+          <div class="metric-card"><div class="metric-val">5</div><div class="metric-label">Agent Tools</div></div>
+          <div class="metric-card feat"><div class="metric-val">16</div><div class="metric-label">API Routes</div></div>
+          <div class="metric-card"><div class="metric-val">&infin;</div><div class="metric-label">Human Control</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <span class="page-num">04</span>
+</div>
+
+<!-- PAGE 5 — FEATURES -->
+<div class="page content">
+  <div class="sec-label">04 — What Makes It Different</div>
+  <div class="sec-title">Five features.<br/><span class="hl">Zero compromise.</span></div>
+  <div class="feat-grid">
+    <div class="feat-item">
+      <div class="feat-num">01</div>
+      <div class="feat-content">
+        <h3>Context-Aware Drafting with RAG</h3>
+        <p>Every sent email is embedded (768-dim vectors) and stored in pgvector. The Writer agent performs semantic cosine similarity search to find related past emails, match your tone per recipient, and reuse templates — all before drafting a single line.</p>
+        <div class="feat-tags">
+          <span class="feat-tag">RAG</span>
+          <span class="feat-tag">pgvector</span>
+          <span class="feat-tag">Gemini Embeddings</span>
+          <span class="feat-tag">Semantic Search</span>
+        </div>
+      </div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-num">02</div>
+      <div class="feat-content">
+        <h3>Two-Agent Quality Loop</h3>
+        <p>Writer drafts, Reviewer evaluates. If it doesn't pass, the Writer rewrites with specific feedback. Max 1 revision cycle.</p>
+        <div class="feat-tags">
+          <span class="feat-tag">OpenAI Agents SDK</span>
+          <span class="feat-tag">Structured Output</span>
+        </div>
+      </div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-num">03</div>
+      <div class="feat-content">
+        <h3>Human-in-the-Loop</h3>
+        <p>Nothing sends without your approval. Preview, edit subject/body/tone inline, attach files. Full control, always.</p>
+        <div class="feat-tags"><span class="feat-tag">UX First</span></div>
+      </div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-num">04</div>
+      <div class="feat-content">
+        <h3>Smart Recipient Intelligence</h3>
+        <p>Automatically detects business domains and looks up the company via web search. Adds relevant context to make emails informed.</p>
+        <div class="feat-tags"><span class="feat-tag">Tavily Web Search</span></div>
+      </div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-num">05</div>
+      <div class="feat-content">
+        <h3>Sends from YOUR Gmail</h3>
+        <p>OAuth2 sends through your own account — not a third-party. Recipients see a normal email from you, with your signature.</p>
+        <div class="feat-tags">
+          <span class="feat-tag">Google OAuth2</span>
+          <span class="feat-tag">Gmail API</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <span class="page-num">05</span>
+</div>
+
+<!-- PAGE 6 — RAG PIPELINE (NEW) -->
+<div class="page rag-page">
+  <div class="sec-label">05 — The Brain Behind It</div>
+  <div class="sec-title">RAG that <span class="hg">remembers.</span></div>
+
+  <p class="rag-intro">
+    Mail-AI uses <strong>Retrieval-Augmented Generation</strong> to make every email personal.
+    Every sent email is automatically <strong>embedded into 768-dimensional vectors</strong> using
+    Gemini's embedding model and stored in <strong>pgvector</strong> (PostgreSQL). When drafting
+    a new email, the Writer agent performs <strong>cosine similarity search</strong> to retrieve
+    the most relevant past emails — matching tone, structure, and context.
+  </p>
+
+  <!-- Pipeline Diagram -->
+  <div class="rag-pipeline">
+    <div class="rag-pipe-step sending">
+      <div class="pipe-label">Step 1</div>
+      <div class="pipe-name">Email Sent</div>
+      <div class="pipe-desc">User approves &amp; sends via Gmail API</div>
+    </div>
+    <div class="rag-pipe-arrow">&rarr;</div>
+    <div class="rag-pipe-step embedding">
+      <div class="pipe-label">Step 2</div>
+      <div class="pipe-name">Gemini Embed</div>
+      <div class="pipe-desc">Subject + body → 768-dim vector</div>
+    </div>
+    <div class="rag-pipe-arrow">&rarr;</div>
+    <div class="rag-pipe-step storing">
+      <div class="pipe-label">Step 3</div>
+      <div class="pipe-name">pgvector Store</div>
+      <div class="pipe-desc">Vector + metadata saved to PostgreSQL</div>
+    </div>
+    <div class="rag-pipe-arrow">&rarr;</div>
+    <div class="rag-pipe-step searching">
+      <div class="pipe-label">Step 4</div>
+      <div class="pipe-name">Cosine Search</div>
+      <div class="pipe-desc">New brief embedded → nearest neighbors</div>
+    </div>
+    <div class="rag-pipe-arrow">&rarr;</div>
+    <div class="rag-pipe-step writing">
+      <div class="pipe-label">Step 5</div>
+      <div class="pipe-name">Writer Agent</div>
+      <div class="pipe-desc">Context-enriched email generation</div>
+    </div>
+  </div>
+
+  <!-- RAG Stats -->
+  <div class="rag-stats-row">
+    <div class="rag-stat">
+      <div class="val purple">768</div>
+      <div class="lbl">Vector Dimensions</div>
+    </div>
+    <div class="rag-stat">
+      <div class="val blue">&lt;=&gt;</div>
+      <div class="lbl">Cosine Similarity</div>
+    </div>
+    <div class="rag-stat">
+      <div class="val green">3</div>
+      <div class="lbl">RAG-Powered Tools</div>
+    </div>
+    <div class="rag-stat">
+      <div class="val yellow">&infin;</div>
+      <div class="lbl">Emails Remembered</div>
+    </div>
+  </div>
+
+  <!-- 3 RAG Tool Cards -->
+  <div class="rag-tools-grid">
+    <div class="rag-tool-card">
+      <div class="tool-num">01</div>
+      <h3>Semantic Thread Search</h3>
+      <p>Finds the 3 most semantically similar past emails to the same recipient using pgvector cosine distance. Surfaces related conversations for context.</p>
+      <div style="background:#f0f0ec;border-left:3px solid var(--green);padding:8px 10px;">
+        <div style="font-family:var(--font-mono);font-size:7.5px;color:#555;line-height:1.5;">
+          <strong style="color:var(--black);">Input:</strong> User's brief + recipient email<br/>
+          <strong style="color:var(--black);">Process:</strong> Embed the brief, compute cosine distance<br/>
+          <strong style="color:var(--black);">Output:</strong> Top 3 semantically related past emails<br/>
+          <strong style="color:var(--black);">Used for:</strong> Conversation continuity &amp; context
+        </div>
+      </div>
+    </div>
+    <div class="rag-tool-card">
+      <div class="tool-num">02</div>
+      <h3>Template Reuse</h3>
+      <p>Finds a structurally similar past email you've sent — reuses it as a style/structure template. Triggered when the user asks to "mirror" a previous email.</p>
+      <div style="background:#f0f0ec;border-left:3px solid var(--green);padding:8px 10px;">
+        <div style="font-family:var(--font-mono);font-size:7.5px;color:#555;line-height:1.5;">
+          <strong style="color:var(--black);">Input:</strong> Brief description of desired email<br/>
+          <strong style="color:var(--black);">Process:</strong> Find closest structural match via embedding<br/>
+          <strong style="color:var(--black);">Output:</strong> 1 most similar past email as template<br/>
+          <strong style="color:var(--black);">Used for:</strong> Style &amp; structure consistency
+        </div>
+      </div>
+    </div>
+    <div class="rag-tool-card">
+      <div class="tool-num">03</div>
+      <h3>Recipient Tone Match</h3>
+      <p>Pulls the last 5 emails to a specific recipient. Extracts the established tone (formal, friendly, etc.) so the Writer agent matches your voice with that person.</p>
+      <div style="background:#f0f0ec;border-left:3px solid var(--green);padding:8px 10px;">
+        <div style="font-family:var(--font-mono);font-size:7.5px;color:#555;line-height:1.5;">
+          <strong style="color:var(--black);">Input:</strong> Recipient email address<br/>
+          <strong style="color:var(--black);">Process:</strong> Query last 5 emails to that person<br/>
+          <strong style="color:var(--black);">Output:</strong> Extracted tone (formal, friendly, casual...)<br/>
+          <strong style="color:var(--black);">Used for:</strong> Per-recipient tone matching
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Write vs Read flow -->
+  <div class="rag-flow-detail">
+    <div class="rag-flow-box">
+      <div class="rag-flow-box-header write">Write Path — Embed on Send</div>
+      <div class="rag-flow-box-body">
+        <div class="step"><div class="step-num">1</div><div class="step-text">User clicks "Approve &amp; Send"</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">Email sent via Gmail API</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">Subject + body concatenated</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-text">Gemini <code>gemini-embedding-001</code> generates 768-dim vector</div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-text">Vector + metadata stored in PostgreSQL emails table</div></div>
+      </div>
+    </div>
+    <div class="rag-flow-box">
+      <div class="rag-flow-box-header read">Read Path — Retrieve on Draft</div>
+      <div class="rag-flow-box-body">
+        <div class="step"><div class="step-num">1</div><div class="step-text">User provides a brief + recipient</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">Writer agent calls 3 RAG tools</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">Brief embedded → pgvector cosine search</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-text">Top-K results returned as context</div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-text">Writer generates context-enriched draft</div></div>
+      </div>
+    </div>
+  </div>
+
+  <span class="page-num">06</span>
+</div>
+
+<!-- PAGE 7 — TECH STACK + LEARNINGS -->
+<div class="page content">
+  <div class="sec-label">06 — Tech Stack &amp; Learnings</div>
+  <div class="sec-title">Modern stack,<br/><span class="hl">zero compromises.</span></div>
+  <div class="tech-grid">
+    <div class="tech-card"><div class="tech-card-icon dark" style="font-weight:900;">N</div><div class="tech-card-name">Next.js 16</div><div class="tech-card-role">Full-Stack Framework</div></div>
+    <div class="tech-card"><div class="tech-card-icon" style="background:#4285f4; color:#fff;">G</div><div class="tech-card-name">Gemini 3.5 Flash</div><div class="tech-card-role">AI Model (via OpenAI SDK)</div></div>
+    <div class="tech-card"><div class="tech-card-icon" style="background:#3ecf8e; color:#fff;">S</div><div class="tech-card-name">Supabase</div><div class="tech-card-role">Auth + PostgreSQL + pgvector</div></div>
+    <div class="tech-card"><div class="tech-card-icon blue" style="color:#fff;">R</div><div class="tech-card-name">OpenAI Agents SDK</div><div class="tech-card-role">Multi-Agent Orchestration</div></div>
+    <div class="tech-card"><div class="tech-card-icon green" style="color:#000;">E</div><div class="tech-card-name">Gmail API</div><div class="tech-card-role">OAuth2 + Send + Read</div></div>
+    <div class="tech-card"><div class="tech-card-icon orange" style="color:#fff;">W</div><div class="tech-card-name">Tavily</div><div class="tech-card-role">Web Search (Company Lookup)</div></div>
+    <div class="tech-card"><div class="tech-card-icon" style="background:#38bdf8; color:#000;">T</div><div class="tech-card-name">Tailwind CSS 4</div><div class="tech-card-role">Styling (Neo-Brutalist)</div></div>
+    <div class="tech-card"><div class="tech-card-icon purple" style="color:#fff;">M</div><div class="tech-card-name">pgvector</div><div class="tech-card-role">Semantic Embeddings</div></div>
+    <div class="tech-card"><div class="tech-card-icon" style="background:#000; color:var(--yellow);">Z</div><div class="tech-card-name">Zod</div><div class="tech-card-role">Schema Validation</div></div>
+  </div>
+  <div class="divider"></div>
+  <div class="sec-label">What I Learned</div>
+  <div class="learn-grid">
+    <div class="learn-card"><h4>RAG &amp; Vector Search</h4><p>Building a full embedding pipeline — generate, store, retrieve. pgvector's cosine distance operator makes semantic search dead simple in PostgreSQL.</p></div>
+    <div class="learn-card"><h4>Multi-Agent Orchestration</h4><p>Coordinating specialized agents with different tools and schemas — decomposing complex AI tasks into composable units.</p></div>
+    <div class="learn-card"><h4>OAuth &amp; Token Management</h4><p>Gmail OAuth with refresh tokens, secure storage, and automatic renewal. Deep understanding of modern auth flows.</p></div>
+    <div class="learn-card"><h4>Human-Centered AI Design</h4><p>AI augments judgment, never replaces it. Every design decision reinforces user control and transparency.</p></div>
+  </div>
+  <span class="page-num">07</span>
+</div>
+
+<!-- PAGE 8 — CLOSING -->
+<div class="page closing">
+  <h2>You brief.<br/>Agents <span class="hl">write.</span><br/>You send.</h2>
+  <p>
+    Mail-AI proves that AI and human judgment aren't opposing forces —
+    they're complementary. With RAG-powered context and multi-agent orchestration,
+    every email sounds like you.
+  </p>
+  <div class="closing-stack">
+    <div class="closing-stack-label">Tech Stack</div>
+    <div class="closing-stack-list">
+      Next.js 16 · React 19 · TypeScript<br/>
+      Gemini 3.5 Flash · OpenAI Agents SDK<br/>
+      Supabase · PostgreSQL · pgvector<br/>
+      Gmail API · Tavily · Tailwind CSS 4
+    </div>
+  </div>
+  <div class="closing-links">
+    <span class="closing-link">Let's Connect</span>
+    <span class="closing-link">View Source</span>
+  </div>
+  <span class="page-num" style="color:#444;">08</span>
+</div>
+
+</body>
+</html>

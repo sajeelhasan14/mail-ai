@@ -19,7 +19,6 @@ export default function EmailComposer() {
   const [sent, setSent] = useState(false);
   const [input, setInput] = useState("");
   const [files, setFiles] = useState<File[]>([]);
-
   const [email, setEmail] = useState<Email | null>(null);
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
