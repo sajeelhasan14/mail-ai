@@ -9,6 +9,7 @@ import {
 const externalClient = new OpenAI({
   apiKey: process.env.GEMINI_API_KEY,
   baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
+  maxRetries: 1,
 });
 
 // 2. Make it the default client every agent uses.
@@ -27,5 +28,9 @@ setTracingDisabled(true);
  * Note: the Writer agent uses tools + structured output together, which older
  * Gemini 2.x models can't do at once. Use a newer model if tool calls misbehave.
  */
-export const MODEL = "gemini-3.5-flash-lite";
-// gemini-flash-latest
+export const MODELS = [
+  "gemini-3.5-flash-lite",
+  "gemini-3.5-flash",
+  "gemini-flash-lite-latest",
+];
+export const MODEL = MODELS[0];

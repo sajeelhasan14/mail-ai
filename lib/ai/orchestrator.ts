@@ -3,11 +3,41 @@
 // 2: HANDOFF
 // 3: ORCHESTRATION VIA CODE (using currently below)
 
-import { run } from "@openai/agents";
+import {
+  run,
+  Agent,
+  type AgentOutputType,
+  type NonStreamRunOptions,
+} from "@openai/agents";
+import { MODELS } from "./setup";
 import { WriterAgent } from "./agents/writer";
 import { reviewerAgent } from "./agents/reviewer";
 
 const MAX_REWRITES = 1;
+
+// 503 = model overloaded, 429 = quota used up for this model, 500 = Google-side error.
+const FALLBACK_STATUSES = [429, 500, 503];
+
+async function runWithFallback<TContext, TOutput extends AgentOutputType>(
+  agent: Agent<TContext, TOutput>,
+  input: string,
+  options?: NonStreamRunOptions<TContext, Agent<TContext, TOutput>>,
+) {
+  let lastError: unknown;
+
+  for (const model of MODELS) {
+    try {
+      return await run(agent.clone({ model }), input, options);
+    } catch (err: any) {
+      if (!FALLBACK_STATUSES.includes(err?.status)) throw err;
+      console.warn(`[AI] ${model} failed with ${err.status}, trying next model...`);
+      lastError = err;
+    }
+  }
+
+  throw lastError;
+}
+
 
 export async function generateEmail(
   description: string,
@@ -17,11 +47,13 @@ export async function generateEmail(
 ) {
   const input = `Sender profile: ${JSON.stringify(profile)}\n\nRecipient: ${recipientEmail}\n\nTask: ${description}`;
   let draft = (
-    await run(WriterAgent, input, { context: { userId, recipientEmail } })
+    await runWithFallback(WriterAgent, input, {
+      context: { userId, recipientEmail },
+    })
   ).finalOutput;
   for (let i = 0; i < MAX_REWRITES; i++) {
     const review = (
-      await run(
+      await runWithFallback(
         reviewerAgent,
         `Request: ${input}\nDraft: ${JSON.stringify(draft)}`,
       )
